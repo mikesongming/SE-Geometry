@@ -92,6 +92,11 @@ class CMakeBuild(build_ext):
                 build_args += ["--config", cfg]
 
         if sys.platform.startswith("darwin"):
+            import sysconfig
+            macosx_version_min = sysconfig.get_config_var('MACOSX_DEPLOYMENT_TARGET')
+            if macosx_version_min:
+                cmake_args += ["-DCMAKE_OSX_DEPLOYMENT_TARGET={}".format(macosx_version_min)]
+
             # Cross-compile support for macOS - respect ARCHFLAGS if set
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
             if archs:
@@ -130,5 +135,5 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     extras_require={"test": ["pytest>=6.0", "numpy>=1.21"]},
-    python_requires=">=3.6",
+    python_requires=">=3.8",
 )
