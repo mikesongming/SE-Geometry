@@ -122,6 +122,8 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", "."] + build_args, cwd=self.build_temp
         )
 
+with open("README.md", "r") as readme:
+    long_description = readme.read()
 
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
@@ -131,7 +133,10 @@ setup(
     author="Mike Song",
     author_email="gnosoir@hotmail.com",
     description="A python wrapper of sun-earth position algorithms",
-    long_description="",
+    long_description=long_description,
+    license="MIT",
+    license_files=["LICENSE"],
+    platforms=["macosx-10.9-x86_64"],
     ext_modules=[CMakeExtension("sun_earth_geometry")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
