@@ -1,3 +1,4 @@
+# set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 add_library(spa SHARED SPA/spa.c SPA/spa.h)
 
 add_executable(spa_tester SPA/spa_tester.c)
