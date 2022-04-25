@@ -133,7 +133,7 @@ setup(
     author_email="gnosoir@hotmail.com",
     description="A python wrapper of sun-earth position algorithms",
     long_description=long_description,
-    license="MIT",
+    license="LGPL",
     license_files=["LICENSE"],
     platforms=["macosx-10.9-x86_64"],
     ext_modules=[CMakeExtension("sun_earth_geometry")],
