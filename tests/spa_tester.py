@@ -1,5 +1,5 @@
 from datetime import datetime
-import sun_earth_geometry
+from sun_earth_geometry import _sun_earth_geometry
 
 # spd = sp.SPData()
 
@@ -23,10 +23,10 @@ import sun_earth_geometry
 # sp.spa_calculate(spd, True)
 
 if __name__ == "__main__":
-    if sun_earth_geometry.__version__ >= '0.3':
+    if _sun_earth_geometry.__version__ >= '0.3':
         print("Deprecated API tester")
     else:
-        from sun_earth_geometry import SunPositionAnalysis
+        from sun_earth_geometry._sun_earth_geometry import SunPositionAnalysis
 
         # spa = SunPositionAnalysis(year=2003, month=10, day=17,
         #     hour=12, minute=30, second=30,

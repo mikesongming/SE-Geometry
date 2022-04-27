@@ -8,7 +8,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(sun_earth_geometry, m) {
+PYBIND11_MODULE(_sun_earth_geometry, m) {
     m.doc() = R"pbdoc(
     Solar-Earth analysis algorithms
     -----------------------------
