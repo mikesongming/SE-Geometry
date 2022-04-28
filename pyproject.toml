@@ -2,6 +2,9 @@
 requires = ["setuptools", "wheel", "build", "versioningit"]
 build-backend = "setuptools.build_meta"
 
+[tool.versioningit]
+write.file = "python/sun_earth_geometry/_version.py"
+
 [tool.versioningit.vcs]
 method = "git"
 match = ["v*"]

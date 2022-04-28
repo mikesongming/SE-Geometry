@@ -3,6 +3,7 @@ import re
 import subprocess
 import sys
 
+from setuptools import find_packages
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
@@ -133,10 +134,13 @@ setup(
     author_email="gnosoir@hotmail.com",
     description="A python wrapper of sun-earth position algorithms",
     long_description=long_description,
-    license="MIT",
+    license="LGPL",
     license_files=["LICENSE"],
+    packages=find_packages(where='python'),
+    package_dir={'sun_earth_geometry':'python/sun_earth_geometry'},
     platforms=["macosx-10.9-x86_64"],
-    ext_modules=[CMakeExtension("sun_earth_geometry")],
+    ext_package="sun_earth_geometry",
+    ext_modules=[CMakeExtension("_sun_earth_geometry")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     extras_require={"test": ["pytest>=6.0", "numpy>=1.21"]},

@@ -10,3 +10,6 @@ It provides:
 
 ## Usage:
 
+
+Tested Platforms:
+- MacOSX-10.9-x86_64
