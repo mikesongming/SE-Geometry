@@ -44,7 +44,7 @@ class SunEarthAnalyzer:
         assert self.has_set_observatory(), "Observatory has not set"
 
         if isinstance(dt, str):
-            dt = datetime.strptime("2003-10-17 12:30:30", "%Y-%m-%d %H:%M:%S")
+            dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
 
         if isinstance(dt, datetime):
             sp = self._sun_position_at(dt.year, dt.month, dt.day,
