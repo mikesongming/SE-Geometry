@@ -6,3 +6,5 @@ dist/
 *.egg-info/
 
 python/sun_earth_geometry/_version.py
+
+__pycache__/

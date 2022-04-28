@@ -1,4 +1,4 @@
-pybind11_add_module(_sun_earth_geometry main.cpp spa_interface.cpp)
+pybind11_add_module(_sun_earth_geometry main.cpp spa_analyzer.cpp)
 
 if(APPLE)
     set_target_properties(_sun_earth_geometry PROPERTIES
