@@ -3,6 +3,7 @@ from dataclasses import asdict
 
 from ._data import Observatory
 from ._data import SunPositionResult
+from ._data import safely_from_dict
 
 from ._sun_earth_geometry import SPA_Analyzer
 
@@ -28,6 +29,13 @@ class SunEarthAnalyzer:
         
         self._impl.set_observatory(**asdict(self._obs))
     
+    def get_observatory(self) -> Observatory:
+        if self.has_set_observatory():
+            return safely_from_dict(
+                self._impl.get_observatory(), Observatory)
+        else:
+            return self._obs
+
     def has_set_observatory(self):
         return self._impl.has_set_observatory()
     
@@ -42,6 +50,7 @@ class SunEarthAnalyzer:
             sp = self._sun_position_at(dt.year, dt.month, dt.day,
                                        dt.hour, dt.minute, dt.second)
             if DEBUG:
+                obs = self.get_observatory()
                 print("----------INPUT----------")
                 print("Year:           %d" % dt.year)
                 print("Month:          %d" % dt.month)    
@@ -49,14 +58,14 @@ class SunEarthAnalyzer:
                 print("Hour:           %d" % dt.hour)     
                 print("Minute:         %d" % dt.minute)   
                 print("Second:         %d" % dt.second)
-                print("Timezone:       %.6f" % self._obs.timezone)
-                print("Longitude:      %.6f" % self._obs.longitude)
-                print("Latitude:       %.6f" % self._obs.latitude)
-                print("Elevation:      %.6f" % self._obs.elevation)
-                print("Pressure:       %.6f" % self._obs.pressure)
-                print("Temperature:    %.6f" % self._obs.temperature)
-                print("Atmos_Refract:  %.6f" % self._obs.atmos_refract)   
-                print("Delta T:        %.6f" % self._obs.delta_t)
+                print("Timezone:       %.6f" % obs.timezone)
+                print("Longitude:      %.6f" % obs.longitude)
+                print("Latitude:       %.6f" % obs.latitude)
+                print("Elevation:      %.6f" % obs.elevation)
+                print("Pressure:       %.6f" % obs.pressure)
+                print("Temperature:    %.6f" % obs.temperature)
+                print("Atmos_Refract:  %.6f" % obs.atmos_refract)   
+                print("Delta T:        %.6f" % obs.delta_t)
                 print("----------OUTPUT----------")
                 print("Julian Day:    %.6f" % sp.julian_day)
                 print("Zenith:        %.6f degrees" % sp.zenith)

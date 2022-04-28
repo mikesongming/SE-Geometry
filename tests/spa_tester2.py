@@ -12,7 +12,7 @@ if __name__ == "__main__":
     
     sp = sea.sun_position_at("2003-10-17 12:30:30", DEBUG=True)
     # sp = sea.sun_position_at(datetime.strptime("2003-10-17 12:30:30", "%Y-%m-%d %H:%M:%S"), DEBUG=True)
-    sp = sea._sun_position_at(year=2003, month=10, day=17, hour=12, minute=30, second=30)
+    # sp = sea._sun_position_at(year=2003, month=10, day=17, hour=12, minute=30, second=30)
     # print(sp)
 
     # sp2 = sea.sun_path_at(year=2003, month=10, day=17, DEBUG=True)
