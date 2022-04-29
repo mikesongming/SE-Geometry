@@ -41,39 +41,49 @@ class SunEarthAnalyzer:
     
     def sun_position_at(self, dt=None, DEBUG=False,
                         **kwargs) -> SunPositionResult:
-        assert self.has_set_observatory(), "Observatory has not set"
+        try:
+            if dt is None:
+                _year, _month = kwargs["year"], kwargs["month"]
+                _day, _hour = kwargs["day"], kwargs["hour"]
+                _minute, _second = kwargs["minute"], kwargs["second"]
+            else:
+                if isinstance(dt, str):
+                    dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
 
-        if isinstance(dt, str):
-            dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
+                if isinstance(dt, datetime):
+                    _year, _month, _day = dt.year, dt.month, dt.day
+                    _hour, _minute, _second = dt.hour, dt.minute, dt.second
+                else:
+                    raise TypeError(f"Invalid type for dt: {type(dt)}")
+        except Exception:
+            raise ValueError(f"Invalid argument: dt={dt}, {kwargs}")
 
-        if isinstance(dt, datetime):
-            sp = self._sun_position_at(dt.year, dt.month, dt.day,
-                                       dt.hour, dt.minute, dt.second)
-            if DEBUG:
-                obs = self.get_observatory()
-                print("----------INPUT----------")
-                print("Year:           %d" % dt.year)
-                print("Month:          %d" % dt.month)    
-                print("Day:            %d" % dt.day)      
-                print("Hour:           %d" % dt.hour)     
-                print("Minute:         %d" % dt.minute)   
-                print("Second:         %d" % dt.second)
-                print("Timezone:       %.6f" % obs.timezone)
-                print("Longitude:      %.6f" % obs.longitude)
-                print("Latitude:       %.6f" % obs.latitude)
-                print("Elevation:      %.6f" % obs.elevation)
-                print("Pressure:       %.6f" % obs.pressure)
-                print("Temperature:    %.6f" % obs.temperature)
-                print("Atmos_Refract:  %.6f" % obs.atmos_refract)   
-                print("Delta T:        %.6f" % obs.delta_t)
-                print("----------OUTPUT----------")
-                print("Julian Day:    %.6f" % sp.julian_day)
-                print("Zenith:        %.6f degrees" % sp.zenith)
-                print("Azimuth:       %.6f degrees" % sp.azimuth)
-            
-            return sp
-        else:
-            raise ValueError(f"Invalid argument: {dt}")
+        sp = self._sun_position_at(_year, _month, _day,
+                                   _hour, _minute, _second)
+
+        if DEBUG:
+            obs = self.get_observatory()
+            print("----------INPUT----------")
+            print("Year:           %d" % _year)
+            print("Month:          %d" % _month)
+            print("Day:            %d" % _day)
+            print("Hour:           %d" % _hour)
+            print("Minute:         %d" % _minute)
+            print("Second:         %d" % _second)
+            print("Timezone:       %.6f" % obs.timezone)
+            print("Longitude:      %.6f" % obs.longitude)
+            print("Latitude:       %.6f" % obs.latitude)
+            print("Elevation:      %.6f" % obs.elevation)
+            print("Pressure:       %.6f" % obs.pressure)
+            print("Temperature:    %.6f" % obs.temperature)
+            print("Atmos_Refract:  %.6f" % obs.atmos_refract)   
+            print("Delta T:        %.6f" % obs.delta_t)
+            print("----------OUTPUT----------")
+            print("Julian Day:    %.6f" % sp.julian_day)
+            print("Zenith:        %.6f degrees" % sp.zenith)
+            print("Azimuth:       %.6f degrees" % sp.azimuth)
+        
+        return sp
 
     def _sun_position_at(self, year: int, month: int, day: int,
                          hour: int, minute: int, second: int):

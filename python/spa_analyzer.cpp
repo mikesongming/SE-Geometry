@@ -1,4 +1,4 @@
-#include <cassert>
+#include <stdexcept>
 
 #include "analyzer.h"
 
@@ -59,7 +59,7 @@ py::tuple SPA_Analyzer::calc_sun_position_at(
     int hour, int minute, int second)
 {
     if (!_observatory_set)
-        throw std::invalid_argument("Observatory has not set");
+        throw std::runtime_error("Observatory has not set");
     
     _spa.year   = year;
     _spa.month  = month;
