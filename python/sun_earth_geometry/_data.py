@@ -1,5 +1,5 @@
 from dataclasses import dataclass, fields, is_dataclass
-from typing import Dict, Optional, Type, Union
+from typing import Dict, Optional, Type, TypeVar
 
 
 @dataclass
@@ -34,10 +34,10 @@ class SunRiseTransitSetResult:
 #     pass
 
 
-_Data = Union[Observatory, SunPositionResult, SunRiseTransitSetResult]
+_Data = TypeVar("_Data", Observatory, SunPositionResult, SunRiseTransitSetResult)
 
 
-def safely_from_dict(d: Dict, cls: Type[_Data]):
+def safely_from_dict(d: Dict, cls: Type[_Data]) -> _Data:
     if is_dataclass(cls):
         field_names = {f.name for f in fields(cls)}
         filtered_d = {k: v for k, v in d.items() if k in field_names}
