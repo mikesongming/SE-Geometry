@@ -2,11 +2,11 @@ pybind11_add_module(_sun_earth_geometry main.cpp spa_analyzer.cpp)
 
 if(APPLE)
     set_target_properties(_sun_earth_geometry PROPERTIES
-       BUILD_RPATH "@loader_path" 
+       BUILD_RPATH "@loader_path"
     )
 elseif(UNIX)
     set_target_properties(_sun_earth_geometry PROPERTIES
-       BUILD_RPATH "${ORIGIN}" 
+       BUILD_RPATH "${ORIGIN}"
     )
 endif()
 

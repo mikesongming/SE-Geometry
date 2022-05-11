@@ -71,7 +71,7 @@ typedef struct
     int hour;            // Observer local hour,   valid range: 0 to  24,  error code: 4
     int minute;          // Observer local minute, valid range: 0 to  59,  error code: 5
     double second;       // Observer local second, valid range: 0 to <60,  error code: 6
-	
+
 	double delta_ut1;    // Fractional second difference between UTC and UT which is used
 	                     // to adjust UTC for earth's irregular rotation rate and is derived
 	                     // from observation only and is reported in this bulletin:

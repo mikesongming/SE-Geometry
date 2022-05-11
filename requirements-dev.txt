@@ -1,0 +1,7 @@
+tox
+tox-conda
+pre-commit
+mypy
+flake8
+black
+isort

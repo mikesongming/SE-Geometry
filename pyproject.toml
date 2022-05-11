@@ -1,5 +1,10 @@
 [build-system]
-requires = ["setuptools >= 61.2.0", "wheel >= 0.37", "build >= 0.7", "versioningit >= 1.1"]
+requires = [
+  "setuptools >= 61.2.0",
+  "wheel >= 0.37",
+  "build >= 0.7",
+  "versioningit >= 1.1",
+]
 build-backend = "setuptools.build_meta"
 
 [tool.versioningit]
@@ -9,3 +14,21 @@ write.file = "python/sun_earth_geometry/_version.py"
 method = "git"
 match = ["v*"]
 default-tag = "0.0.0"
+
+# Isort section
+# Read more here: https://pycqa.github.io/isort/docs/configuration/options.html
+[tool.isort]
+profile = "black"
+src_paths = ["python", "tests"]
+known_first_party = ["sun_earth_geometry", "_sun_earth_geometry"]
+
+# [tool.isort.import_headings]
+# stdlib = "built-in"
+# firstparty = "in project"
+# thirdparty = "3rd-party"
+# localfolder = "local"
+
+# Black section
+# Read more here: https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
+[tool.black]
+line-length = 88

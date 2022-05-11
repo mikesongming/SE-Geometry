@@ -8,7 +8,8 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(_sun_earth_geometry, m) {
+PYBIND11_MODULE(_sun_earth_geometry, m)
+{
     m.doc() = R"pbdoc(
     Solar-Earth analysis algorithms
     -----------------------------
@@ -26,5 +27,4 @@ PYBIND11_MODULE(_sun_earth_geometry, m) {
         .def("set_observatory", &SPA_Analyzer::set_observatory)
         .def("has_set_observatory", &SPA_Analyzer::has_set_observatory)
         .def("calc_sun_position_at", &SPA_Analyzer::calc_sun_position_at);
-
 }
