@@ -1,15 +1,11 @@
-from datetime import datetime
 from dataclasses import asdict
+from datetime import datetime
 
-from ._data import Observatory
-from ._data import SunPositionResult
-from ._data import safely_from_dict
-
+from ._data import Observatory, SunPositionResult, safely_from_dict
 from ._sun_earth_geometry import SPA_Analyzer
 
 
 class SunEarthAnalyzer:
-
     def __init__(self, algorithm="SPA") -> None:
         self._algorithm = algorithm
         self._obs = Observatory(0.0, 0.0, 0.0, 0.0)
@@ -21,26 +17,24 @@ class SunEarthAnalyzer:
         else:
             raise ValueError(f"Unknown algorithm {self._algorithm}")
 
-    def set_observatory(self, **kwargs) -> None: 
+    def set_observatory(self, **kwargs) -> None:
         obs_keys = vars(self._obs)
         for k, v in kwargs.items():
             if k in obs_keys:
                 setattr(self._obs, k, v)
-        
+
         self._impl.set_observatory(**asdict(self._obs))
-    
+
     def get_observatory(self) -> Observatory:
         if self.has_set_observatory():
-            return safely_from_dict(
-                self._impl.get_observatory(), Observatory)
+            return safely_from_dict(self._impl.get_observatory(), Observatory)
         else:
             return self._obs
 
     def has_set_observatory(self):
         return self._impl.has_set_observatory()
-    
-    def sun_position_at(self, dt=None, DEBUG=False,
-                        **kwargs) -> SunPositionResult:
+
+    def sun_position_at(self, dt=None, DEBUG=False, **kwargs) -> SunPositionResult:
         try:
             if dt is None:
                 _year, _month = kwargs["year"], kwargs["month"]
@@ -58,8 +52,7 @@ class SunEarthAnalyzer:
         except Exception:
             raise ValueError(f"Invalid argument: dt={dt}, {kwargs}")
 
-        sp = self._sun_position_at(_year, _month, _day,
-                                   _hour, _minute, _second)
+        sp = self._sun_position_at(_year, _month, _day, _hour, _minute, _second)
 
         if DEBUG:
             obs = self.get_observatory()
@@ -76,24 +69,26 @@ class SunEarthAnalyzer:
             print("Elevation:      %.6f" % obs.elevation)
             print("Pressure:       %.6f" % obs.pressure)
             print("Temperature:    %.6f" % obs.temperature)
-            print("Atmos_Refract:  %.6f" % obs.atmos_refract)   
+            print("Atmos_Refract:  %.6f" % obs.atmos_refract)
             print("Delta T:        %.6f" % obs.delta_t)
             print("----------OUTPUT----------")
             print("Julian Day:    %.6f" % sp.julian_day)
             print("Zenith:        %.6f degrees" % sp.zenith)
             print("Azimuth:       %.6f degrees" % sp.azimuth)
-        
+
         return sp
 
-    def _sun_position_at(self, year: int, month: int, day: int,
-                         hour: int, minute: int, second: int):
+    def _sun_position_at(
+        self, year: int, month: int, day: int, hour: int, minute: int, second: int
+    ):
         """
         directly call c++ library, when performance is critical
         """
         zenith, azimuth, julian_day = self._impl.calc_sun_position_at(
-            year, month, day, hour, minute, second)
+            year, month, day, hour, minute, second
+        )
 
         return SunPositionResult(zenith, azimuth, julian_day)
-    
+
     def __repr__(self) -> str:
         return f"SunEarthAnalyzer(algorithm={self._algorithm})"

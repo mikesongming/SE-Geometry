@@ -104,10 +104,10 @@
 // Revised 14-JAN-2009 Andreas
 //         Corrected a constant used to calculate ecliptic mean obliquity.
 // Revised 01-APR-2013 Andreas
-//		   Replace floor with new integer function for tech. report consistency, no affect on results.
+//           Replace floor with new integer function for tech. report consistency, no affect on results.
 //         Add "utility" function prototypes to header file for use with NREL's SAMPA.
 //         Rename 4 "utility" function names (remove "sun") for clarity with NREL's SAMPA.
-//		   Added delta_ut1 as required input, which the fractional second difference between UT and UTC.
+//           Added delta_ut1 as required input, which the fractional second difference between UT and UTC.
 //         Time must be input w/o delta_ut1 adjustment, instead of assuming adjustment was pre-applied.
 // Revised 10-JUL-2014 Andreas
 //         Change second in spa_data structure from an integer to double to allow fractional second
@@ -532,7 +532,7 @@ double deg2rad(double degrees)
 
 int integer(double value)
 {
-	return value;
+    return value;
 }
 
 double limit_degrees(double degrees)
@@ -611,7 +611,7 @@ int validate_inputs(spa_data *spa)
     if ((spa->pressure    < 0    ) || (spa->pressure    > 5000)) return 12;
     if ((spa->temperature <= -273) || (spa->temperature > 6000)) return 13;
     if ((spa->delta_ut1   <= -1  ) || (spa->delta_ut1   >= 1  )) return 17;
-	if ((spa->hour        == 24  ) && (spa->minute      > 0   )) return 5;
+    if ((spa->hour        == 24  ) && (spa->minute      > 0   )) return 5;
     if ((spa->hour        == 24  ) && (spa->second      > 0   )) return 6;
 
     if (fabs(spa->delta_t)       > 8000    ) return 7;
@@ -860,7 +860,7 @@ double sun_equatorial_horizontal_parallax(double r)
 }
 
 void right_ascension_parallax_and_topocentric_dec(double latitude, double elevation,
-	       double xi, double h, double delta, double *delta_alpha, double *delta_prime)
+           double xi, double h, double delta, double *delta_alpha, double *delta_prime)
 {
     double delta_alpha_rad;
     double lat_rad   = deg2rad(latitude);
@@ -900,7 +900,7 @@ double topocentric_elevation_angle(double latitude, double delta_prime, double h
 }
 
 double atmospheric_refraction_correction(double pressure, double temperature,
-	                                     double atmos_refract, double e0)
+                                         double atmos_refract, double e0)
 {
     double del_e = 0;
 
@@ -936,7 +936,7 @@ double topocentric_azimuth_angle(double azimuth_astro)
 }
 
 double surface_incidence_angle(double zenith, double azimuth_astro, double azm_rotation,
-	                                                                double slope)
+                                                                    double slope)
 {
     double zenith_rad = deg2rad(zenith);
     double slope_rad  = deg2rad(slope);
@@ -1065,15 +1065,15 @@ void calculate_eot_and_sun_rise_transit_set(spa_data *spa)
     double h0_prime = -1*(SUN_RADIUS + spa->atmos_refract);
     int i;
 
-	sun_rts  = *spa;
+    sun_rts  = *spa;
     m        = sun_mean_longitude(spa->jme);
     spa->eot = eot(m, spa->alpha, spa->del_psi, spa->epsilon);
 
     sun_rts.hour = sun_rts.minute = sun_rts.second = 0;
-	sun_rts.delta_ut1 = sun_rts.timezone = 0.0;
+    sun_rts.delta_ut1 = sun_rts.timezone = 0.0;
 
     sun_rts.jd = julian_day (sun_rts.year,   sun_rts.month,  sun_rts.day,       sun_rts.hour,
-		                     sun_rts.minute, sun_rts.second, sun_rts.delta_ut1, sun_rts.timezone);
+                             sun_rts.minute, sun_rts.second, sun_rts.delta_ut1, sun_rts.timezone);
 
     calculate_geocentric_sun_right_ascension_and_declination(&sun_rts);
     nu = sun_rts.nu;
@@ -1137,7 +1137,7 @@ int spa_calculate(spa_data *spa)
     if (result == 0)
     {
         spa->jd = julian_day (spa->year,   spa->month,  spa->day,       spa->hour,
-			                  spa->minute, spa->second, spa->delta_ut1, spa->timezone);
+                              spa->minute, spa->second, spa->delta_ut1, spa->timezone);
 
         calculate_geocentric_sun_right_ascension_and_declination(spa);
 

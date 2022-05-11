@@ -3,8 +3,7 @@ import re
 import subprocess
 import sys
 
-from setuptools import find_packages
-from setuptools import Extension, setup
+from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
@@ -94,9 +93,12 @@ class CMakeBuild(build_ext):
 
         if sys.platform.startswith("darwin"):
             import sysconfig
-            macosx_version_min = sysconfig.get_config_var('MACOSX_DEPLOYMENT_TARGET')
+
+            macosx_version_min = sysconfig.get_config_var("MACOSX_DEPLOYMENT_TARGET")
             if macosx_version_min:
-                cmake_args += ["-DCMAKE_OSX_DEPLOYMENT_TARGET={}".format(macosx_version_min)]
+                cmake_args += [
+                    "-DCMAKE_OSX_DEPLOYMENT_TARGET={}".format(macosx_version_min)
+                ]
 
             # Cross-compile support for macOS - respect ARCHFLAGS if set
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
@@ -123,6 +125,7 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", "."] + build_args, cwd=self.build_temp
         )
 
+
 with open("README.md", "r") as readme:
     long_description = readme.read()
 
@@ -136,8 +139,8 @@ setup(
     long_description=long_description,
     license="LGPL",
     license_files=["LICENSE"],
-    packages=find_packages(where='python'),
-    package_dir={'sun_earth_geometry':'python/sun_earth_geometry'},
+    packages=find_packages(where="python"),
+    package_dir={"sun_earth_geometry": "python/sun_earth_geometry"},
     platforms=["macosx-10.9-x86_64"],
     ext_package="sun_earth_geometry",
     ext_modules=[CMakeExtension("_sun_earth_geometry")],

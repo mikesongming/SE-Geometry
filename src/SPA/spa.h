@@ -72,12 +72,12 @@ typedef struct
     int minute;          // Observer local minute, valid range: 0 to  59,  error code: 5
     double second;       // Observer local second, valid range: 0 to <60,  error code: 6
 
-	double delta_ut1;    // Fractional second difference between UTC and UT which is used
-	                     // to adjust UTC for earth's irregular rotation rate and is derived
-	                     // from observation only and is reported in this bulletin:
-	                     // http://maia.usno.navy.mil/ser7/ser7.dat,
-	                     // where delta_ut1 = DUT1
-	                     // valid range: -1 to 1 second (exclusive), error code 17
+    double delta_ut1;    // Fractional second difference between UTC and UT which is used
+                         // to adjust UTC for earth's irregular rotation rate and is derived
+                         // from observation only and is reported in this bulletin:
+                         // http://maia.usno.navy.mil/ser7/ser7.dat,
+                         // where delta_ut1 = DUT1
+                         // valid range: -1 to 1 second (exclusive), error code 17
 
     double delta_t;      // Difference between earth rotation time and terrestrial time
                          // It is derived from observation only and is reported in this
@@ -192,12 +192,12 @@ double geocentric_right_ascension(double lamda, double epsilon, double beta);
 double geocentric_declination(double beta, double epsilon, double lamda);
 double observer_hour_angle(double nu, double longitude, double alpha_deg);
 void   right_ascension_parallax_and_topocentric_dec(double latitude, double elevation,
-	         double xi, double h, double delta, double *delta_alpha, double *delta_prime);
+             double xi, double h, double delta, double *delta_alpha, double *delta_prime);
 double topocentric_right_ascension(double alpha_deg, double delta_alpha);
 double topocentric_local_hour_angle(double h, double delta_alpha);
 double topocentric_elevation_angle(double latitude, double delta_prime, double h_prime);
 double atmospheric_refraction_correction(double pressure, double temperature,
-	                                     double atmos_refract, double e0);
+                                         double atmos_refract, double e0);
 double topocentric_elevation_angle_corrected(double e0, double delta_e);
 double topocentric_zenith_angle(double e);
 double topocentric_azimuth_angle_astro(double h_prime, double latitude, double delta_prime);
