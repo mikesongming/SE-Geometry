@@ -1,5 +1,7 @@
 # from datetime import datetime
 
+from typing import Dict, Union
+
 from sun_earth_geometry import _sun_earth_geometry
 
 # spd = sp.SPData()
@@ -45,7 +47,7 @@ if __name__ == "__main__":
             "temperature": 11,
             "atmos_refract": 0.5667,
         }
-        input_full = {
+        input_full: Dict[str, Union[int, float]] = {
             "year": 2003,
             "month": 10,
             "day": 17,

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, fields, is_dataclass
-from typing import Dict, Type, Union
+from typing import Dict, Optional, Type, Union
 
 
 @dataclass
@@ -19,7 +19,7 @@ class Observatory:
 class SunPositionResult:
     zenith: float
     azimuth: float
-    julian_day: float = None
+    julian_day: Optional[float] = None
 
 
 @dataclass
@@ -37,7 +37,7 @@ class SunRiseTransitSetResult:
 _Data = Union[Observatory, SunPositionResult, SunRiseTransitSetResult]
 
 
-def safely_from_dict(d: Dict, cls: Type[_Data]) -> _Data:
+def safely_from_dict(d: Dict, cls: Type[_Data]):
     if is_dataclass(cls):
         field_names = {f.name for f in fields(cls)}
         filtered_d = {k: v for k, v in d.items() if k in field_names}

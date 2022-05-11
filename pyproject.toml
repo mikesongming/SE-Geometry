@@ -32,3 +32,6 @@ known_first_party = ["sun_earth_geometry", "_sun_earth_geometry"]
 # Read more here: https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
 [tool.black]
 line-length = 88
+
+# MyPy section
+[tool.mypy]
