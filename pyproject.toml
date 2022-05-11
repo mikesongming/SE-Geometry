@@ -7,6 +7,15 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "sun_earth_geometry"
+authors = [{ "name" = "Mike Song", "email" = "gnosoir@hotmail.com" }]
+urls = { "Homepage" = "https://github.com/mikesongming/sun_earth_analysis" }
+description = "A python wrapper of sun-earth position algorithms"
+readme = "README.md"
+license = { text = "LGPL" }
+dynamic = ["version", "requires-python"]
+
 [tool.versioningit]
 write.file = "python/sun_earth_geometry/_version.py"
 
@@ -35,3 +44,9 @@ line-length = 88
 
 # MyPy section
 [tool.mypy]
+
+# PyTest section
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["tests"]

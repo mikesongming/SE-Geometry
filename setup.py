@@ -126,26 +126,16 @@ class CMakeBuild(build_ext):
         )
 
 
-with open("README.md", "r") as readme:
-    long_description = readme.read()
-
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    name="sun_earth_geometry",
-    author="Mike Song",
-    author_email="gnosoir@hotmail.com",
-    description="A python wrapper of sun-earth position algorithms",
-    long_description=long_description,
-    license="LGPL",
-    license_files=["LICENSE"],
     packages=find_packages(where="python"),
     package_dir={"sun_earth_geometry": "python/sun_earth_geometry"},
-    platforms=["macosx-10.9-x86_64"],
     ext_package="sun_earth_geometry",
     ext_modules=[CMakeExtension("_sun_earth_geometry")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
-    extras_require={"test": ["pytest>=7.1", "numpy>=1.21"]},
+    # extras_require={"test": ["pytest>=7.1", "numpy>=1.21"]},  move to tox.ini
     python_requires=">=3.10",
+    platforms=["macosx-10.9-x86_64"],
 )

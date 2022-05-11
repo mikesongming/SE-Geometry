@@ -24,8 +24,8 @@ if __name__ == "__main__":
     sp = sea.sun_position_at(
         year=2003, month=10, day=17, hour=12, minute=30, second=30, DEBUG=True
     )
-    sp = sea.sun_position_at(
-        year=2003, month=10, day=17, hour=12, minute=30, second=30, DEBUG=True
+    sp = sea._sun_position_at(
+        year=2003, month=10, day=17, hour=12, minute=30, second=30
     )
     # print(sp)
 

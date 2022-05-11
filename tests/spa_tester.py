@@ -1,5 +1,6 @@
 # from datetime import datetime
 
+import warnings
 from typing import Dict, Union
 
 from sun_earth_geometry import _sun_earth_geometry
@@ -27,7 +28,10 @@ from sun_earth_geometry import _sun_earth_geometry
 
 if __name__ == "__main__":
     if _sun_earth_geometry.__version__ >= "0.3":
-        print("Deprecated API tester")
+        warnings.warn(
+            "SunPositionAnalysis is deprecated; use SunEarthAnalyzer.",
+            DeprecationWarning,
+        )
     else:
         from sun_earth_geometry._sun_earth_geometry import SunPositionAnalysis
 
