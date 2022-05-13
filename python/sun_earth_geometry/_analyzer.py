@@ -1,7 +1,13 @@
 from dataclasses import asdict
 from datetime import datetime
+from typing import Any, Tuple
 
-from ._data import Observatory, SunPositionResult, safely_from_dict
+from ._data import (
+    OBS_TIME_T,
+    Observatory,
+    TopoCentricSunPositionResult,
+    safely_from_dict,
+)
 from ._sun_earth_geometry import SPA_Analyzer
 
 
@@ -34,12 +40,14 @@ class SunEarthAnalyzer:
     def has_set_observatory(self):
         return self._impl.has_set_observatory()
 
-    def sun_position_at(self, dt=None, DEBUG=False, **kwargs) -> SunPositionResult:
+    def sun_position_at(
+        self, dt: Any = None, DEBUG: bool = False, **kwargs
+    ) -> Tuple[OBS_TIME_T, TopoCentricSunPositionResult]:
         try:
             if dt is None:
-                _year, _month = kwargs["year"], kwargs["month"]
-                _day, _hour = kwargs["day"], kwargs["hour"]
-                _minute, _second = kwargs["minute"], kwargs["second"]
+                _year, _month = int(kwargs["year"]), int(kwargs["month"])
+                _day, _hour = int(kwargs["day"]), int(kwargs["hour"])
+                _minute, _second = int(kwargs["minute"]), int(kwargs["second"])
             else:
                 if isinstance(dt, str):
                     dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
@@ -72,15 +80,17 @@ class SunEarthAnalyzer:
             print("Atmos_Refract:  %.6f" % obs.atmos_refract)
             print("Delta T:        %.6f" % obs.delta_t)
             print("----------OUTPUT----------")
-            print("Julian Day:    %.6f" % sp.julian_day)
+            if sp.julian_day:
+                print("Julian Day:    %.6f" % sp.julian_day)
             print("Zenith:        %.6f degrees" % sp.zenith)
             print("Azimuth:       %.6f degrees" % sp.azimuth)
 
-        return sp
+        dt = (_year, _month, _day, _hour, _minute, _second)
+        return dt, sp
 
     def _sun_position_at(
         self, year: int, month: int, day: int, hour: int, minute: int, second: int
-    ):
+    ) -> TopoCentricSunPositionResult:
         """
         directly call c++ library, when performance is critical
         """
@@ -88,7 +98,7 @@ class SunEarthAnalyzer:
             year, month, day, hour, minute, second
         )
 
-        return SunPositionResult(zenith, azimuth, julian_day)
+        return TopoCentricSunPositionResult(zenith, azimuth, julian_day)
 
     def __repr__(self) -> str:
         return f"SunEarthAnalyzer(algorithm={self._algorithm})"

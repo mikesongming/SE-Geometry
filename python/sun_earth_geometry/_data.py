@@ -1,5 +1,5 @@
 from dataclasses import dataclass, fields, is_dataclass
-from typing import Dict, Optional, Type, TypeVar
+from typing import Dict, Optional, Tuple, Type, TypeAlias, TypeVar
 
 
 @dataclass
@@ -16,14 +16,14 @@ class Observatory:
 
 
 @dataclass
-class SunPositionResult:
+class TopoCentricSunPositionResult:
     zenith: float
     azimuth: float
     julian_day: Optional[float] = None
 
 
 @dataclass
-class SunRiseTransitSetResult:
+class TopoCentricSunRiseTransitSetResult:
     suntransit: float
     sunrise: float
     sunset: float
@@ -33,8 +33,14 @@ class SunRiseTransitSetResult:
 # class SunPathResult:
 #     pass
 
+OBS_TIME_T: TypeAlias = Tuple[int, int, int, int, int, int]
 
-_Data = TypeVar("_Data", Observatory, SunPositionResult, SunRiseTransitSetResult)
+_Data = TypeVar(
+    "_Data",
+    Observatory,
+    TopoCentricSunPositionResult,
+    TopoCentricSunRiseTransitSetResult,
+)
 
 
 def safely_from_dict(d: Dict, cls: Type[_Data]) -> _Data:
