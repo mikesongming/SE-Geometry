@@ -50,3 +50,7 @@ line-length = 88
 minversion = "7.0"
 addopts = "-k 'not deprecated' -ra"
 testpaths = ["tests"]
+markers = [
+  "mpi: mark tests for mpi implementation",
+  "gpu: mark tests for gpu implementation",
+]
