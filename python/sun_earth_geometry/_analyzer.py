@@ -12,13 +12,23 @@ from ._sun_earth_geometry import SPA_Analyzer
 
 
 class SunEarthAnalyzer:
-    def __init__(self, algorithm="SPA") -> None:
+    """
+    Interface class for sun-earth-analysis
+
+    Args:
+        algorithm (str): currently supports 'SPA'; Defaults to 'SPA'
+
+    Ref:
+        SPA: https://midcdmz.nrel.gov/spa/
+    """
+
+    def __init__(self, algorithm: str = "SPA") -> None:
         self._algorithm = algorithm
         self._obs = Observatory(0.0, 0.0, 0.0, 0.0)
         self._load_algorithm()
 
     def _load_algorithm(self):
-        if self._algorithm == "SPA":
+        if self._algorithm.upper() == "SPA":
             self._impl = SPA_Analyzer()
         else:
             raise ValueError(f"Unknown algorithm {self._algorithm}")
@@ -37,12 +47,66 @@ class SunEarthAnalyzer:
         else:
             return self._obs
 
-    def has_set_observatory(self):
+    def has_set_observatory(self) -> bool:
+        """
+        check whether observatory is set for analyzer
+
+        Returns:
+            bool: True for set
+
+        Examples:
+            >>> sea = SunEarthAnalyzer()
+            >>> sea.has_set_observatory()
+            False
+            >>> sea.sun_position_at(2020,5,13,17,15,30)
+            Traceback (most recent call last):
+              ...
+            RuntimeError: Observatory has not set
+
+            >>> d = {'timezone': -7.0, 'longitude': -105.1786, 'latitude': 39.742476,
+            ...      'elevation': 1830.14, 'foo': 100.0}
+            >>> sea.set_observatory(**d)
+            >>> sea.has_set_observatory()
+            True
+        """
         return self._impl.has_set_observatory()
 
     def sun_position_at(
         self, dt: Any = None, DEBUG: bool = False, **kwargs
     ) -> Tuple[OBS_TIME_T, TopoCentricSunPositionResult]:
+        """
+        API for calculating sun position at a time
+
+        Args:
+            dt (Any, optional): supports str and datetime format of observation
+                time. Defaults to None, when kwargs of (year, month, day, hour,
+                minute, second) must be given.
+            DEBUG (bool, optional): when set, print result in multiline format.
+                Defaults to False.
+
+        Raises:
+            ValueError: invalid inputs for observation time or
+                failed at validation stage of the implemented algorithm
+
+        Returns:
+            (dt,sp) (Tuple[OBS_TIME_T, TopoCentricSunPositionResult]):
+                dt (year,month,day,hour,minute,second): parsed observation time
+                sp: topocentric solar position with julian day
+
+        Examples:
+            >>> sea = SunEarthAnalyzer()
+            >>> sea.set_observatory(
+            ...     longitude=-105.1786, latitude=39.742476, elevation=1830.14,
+            ...     timezone=-7.0, delta_ut1=0, delta_t=67,
+            ...     pressure=820, temperature=11, atmos_refract=0.5667,
+            ... )
+            >>> dt, sp = sea.sun_position_at("2003-10-17 12:30:30")
+            >>> dt
+            (2003, 10, 17, 12, 30, 30)
+            >>> sp
+            TopoCentricSunPositionResult(zenith=50.11162202402972,
+            ... azimuth=194.34024051019162, julian_day=2452930.312847222)
+        """
         try:
             if dt is None:
                 _year, _month = int(kwargs["year"]), int(kwargs["month"])

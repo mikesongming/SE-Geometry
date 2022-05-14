@@ -44,6 +44,28 @@ _Data = TypeVar(
 
 
 def safely_from_dict(d: Dict, cls: Type[_Data]) -> _Data:
+    """
+    generate dataclass from dict by dropping irrelevant keys
+
+    Args:
+        d (Dict): data dict
+        cls (Type[_Data]): data class type
+
+    Raises:
+        TypeError: failed to generate data class
+
+    Returns:
+        _Data: data class of type <cls>
+
+    Examples:
+        >>> d = {'timezone': -7.0, 'longitude': -105.1786, 'latitude': 39.742476,
+        ... 'elevation': 1830.14, 'foo': 100.0}
+        >>> safely_from_dict(d, Observatory)
+        Observatory(longitude=-105.1786, latitude=39.742476, elevation=1830.14,
+        timezone=-7.0, delta_ut1=0, delta_t=0, pressure=0, temperature=0,
+        atmos_refract=0)
+
+    """
     if is_dataclass(cls):
         field_names = {f.name for f in fields(cls)}
         filtered_d = {k: v for k, v in d.items() if k in field_names}
