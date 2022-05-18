@@ -8,3 +8,5 @@ dist/
 python/sun_earth_geometry/_version.py
 
 __pycache__/
+.mypy_cache/
+.pytest_cache/

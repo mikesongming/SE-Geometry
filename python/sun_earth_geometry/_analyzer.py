@@ -11,7 +11,7 @@ from ._data import (
 from ._sun_earth_geometry import SPA_Analyzer
 
 
-class SunEarthAnalyzer:
+class SunEarthAnalyzer(object):
     """
     Interface class for sun-earth-analysis
 
