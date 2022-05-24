@@ -9,6 +9,8 @@ Contributions are made to this repo via Issues and Pull Requests (PRs).
 For those unfamiliar, please visit the ["fork-and-pull" Git workflow](https://github.com/susam/gitpr) for reference.
 Reading and following these guidelines will help us make the contribution process easy and effective for everyone involved.
 
+### Code of Conduct
+This project and everyone participating in it is governed by the [FSEG Code of Conduct](https://github.com/mikesongming/SE-Geometry/blob/master/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to <gnosoir@hotmail.com>.
 
 ### Issues
 
