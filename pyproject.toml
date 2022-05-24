@@ -13,7 +13,7 @@ authors = [{ "name" = "Mike Song", "email" = "gnosoir@hotmail.com" }]
 urls = { "Homepage" = "https://mikesongming.github.io/SE-Geometry" }
 description = "A python wrapper of algorithms for sun-earth geometry "
 readme = "README.md"
-license = { text = "GPL-3.0" }
+license = { text = "LGPL-2.1" }
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Environment :: MacOS X",

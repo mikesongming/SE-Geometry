@@ -51,9 +51,9 @@ More contributors and sponsors are welcome. Please visit [CONTRIBUTING](https://
 
 # License
 
-To aggregate expertise and efforts from both uncommercial and commercial entities, FSEG adopts the [GPLv3 License](LICENSE).
+To aggregate expertise and efforts from both uncommercial and commercial entities, FSEG adopts the [LGPLv2.1 License](LICENSE).
 
-本项目版权采用[GPLv3](LICENSE)开源协议，意味着基于本项目的库文件可以进行任意开源或者闭源软件的开发，但是对本项目的**任意修改**需要采用同样的协议开源。
+本项目版权采用[LGPLv2.1](LICENSE)开源协议，意味着基于本项目的库文件可以进行任意开源或者闭源软件的开发，但是对本项目的**任意修改**需要采用同样的协议开源。
 
 如有疑问，请联系 gnosoir@hotmail.com 。
 
