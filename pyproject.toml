@@ -10,10 +10,24 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sun_earth_geometry"
 authors = [{ "name" = "Mike Song", "email" = "gnosoir@hotmail.com" }]
-urls = { "Homepage" = "https://github.com/mikesongming/sun_earth_analysis" }
-description = "A python wrapper of sun-earth position algorithms"
+urls = { "Homepage" = "https://mikesongming.github.io/SE-Geometry" }
+description = "A python wrapper of algorithms for sun-earth geometry "
 readme = "README.md"
-license = { text = "LGPL" }
+license = { text = "GPL-3.0" }
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Environment :: MacOS X",
+  # "Environment :: GPU",
+  # "Environment :: GPU :: NVIDIA CUDA",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+  "Operating System :: MacOS",
+  "Programming Language :: C++",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Scientific/Engineering :: GIS",
+]
 dynamic = ["version", "requires-python"]
 
 [tool.versioningit]

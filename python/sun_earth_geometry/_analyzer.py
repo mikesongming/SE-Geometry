@@ -17,9 +17,6 @@ class SunEarthAnalyzer(object):
 
     Args:
         algorithm (str): currently supports 'SPA'; Defaults to 'SPA'
-
-    Ref:
-        SPA: https://midcdmz.nrel.gov/spa/
     """
 
     def __init__(self, algorithm: str = "SPA") -> None:
