@@ -1,7 +1,6 @@
-# towncrier generated
+# <center><small>empowered by</small> [@Towncrier](https://towncrier.readthedocs.io/en/latest/)</center>
 
-~~~rst
+
 {%
-    include "../../NEWS.rst"
+    include-markdown "../../CHANGELOG.md"
 %}
-~~~

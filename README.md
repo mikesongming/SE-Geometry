@@ -38,7 +38,7 @@ To build by source, call a [PEP517](https://peps.python.org/pep-0517) compliant 
 python -m build
 ```
 
-For more details, please visit [INSTALLATION](https://mikesongming.github.io/SE-Geometry/user-guide/installation).
+For more details, please visit [INSTALLATION](https://mikesongming.github.io/SE-Geometry/user-guide/install/).
 
 # Contributors
 
@@ -46,7 +46,7 @@ For more details, please visit [INSTALLATION](https://mikesongming.github.io/SE-
 
 - Mike Song, <gnosoir@hotmail.com>
 
-More contributors and sponsors are welcome. Please visit [CONTRIBUTING](https://mikesongming.github.io/SE-Geometry/user-guide/contributing) for details.
+More contributors and sponsors are welcome. Please visit [CONTRIBUTING](https://mikesongming.github.io/SE-Geometry/about/contributing/) for details.
 
 
 # License
