@@ -8,7 +8,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sun_earth_geometry"
+name = "fseg"
 authors = [{ "name" = "Mike Song", "email" = "gnosoir@hotmail.com" }]
 urls = { "Homepage" = "https://mikesongming.github.io/SE-Geometry" }
 description = "A python wrapper of algorithms for sun-earth geometry "
@@ -31,7 +31,7 @@ classifiers = [
 dynamic = ["version", "requires-python"]
 
 [tool.versioningit]
-write.file = "python/sun_earth_geometry/_version.py"
+write.file = "python/fseg/_version.py"
 
 [tool.versioningit.vcs]
 method = "git"
@@ -43,7 +43,7 @@ default-tag = "0.0.0"
 [tool.isort]
 profile = "black"
 src_paths = ["python", "tests"]
-known_first_party = ["sun_earth_geometry", "_sun_earth_geometry"]
+known_first_party = ["fseg", "_fseg"]
 
 # [tool.isort.import_headings]
 # stdlib = "built-in"
@@ -77,7 +77,7 @@ markers = [
 filename = "CHANGELOG.md"
 directory = ".changelog/news"
 template = ".changelog/template.md"
-title_format = "## v{version} ({project_date})"
+title_format = "## {name} v{version} ({project_date})"
 issue_format = "[#{issue}](https://github.com/mikesongming/SE-Geometry/issues/{issue})"
 start_string = "<!-- TOWNCRIER -->\n"
 underlines = ["", "", ""]

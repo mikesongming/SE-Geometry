@@ -1,7 +1,7 @@
 
-::: sun_earth_geometry._data.Observatory
+::: fseg._data.Observatory
 
-::: sun_earth_geometry._data.TopoCentricSunPositionResult
+::: fseg._data.TopoCentricSunPositionResult
 
 <!-- ## safely_from_dict
-::: sun_earth_geometry._data.safely_from_dict -->
+::: fseg._data.safely_from_dict -->

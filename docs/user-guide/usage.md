@@ -41,7 +41,7 @@ print(FSEG.__version__)
     TopoCentricSunPositionResult(zenith=50.11162202402972,
     ... azimuth=194.34024051019162, julian_day=2452930.312847222)
     ```
-Other type of arguments like `List[int]` are also supported, see [reference](https://mikesongming.github.io/SE-Geometry/reference/SunEarthAnalyzer/#sun_earth_geometry._analyzer.SunEarthAnalyzer.sun_position_at) for details.
+Other type of arguments like `List[int]` are also supported, see [reference](https://mikesongming.github.io/SE-Geometry/reference/SunEarthAnalyzer/#fseg._analyzer.SunEarthAnalyzer.sun_position_at) for details.
 
 <!-- ##  sun path
 

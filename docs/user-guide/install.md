@@ -31,7 +31,7 @@ python -m build
 
 If successful, we can install the wheel by pip:
 ```sh
-pip install dist/sun_earth_geometry-${ver}-${plat_name}_${arch}.whl
+pip install dist/fseg-${ver}-${plat_name}_${arch}.whl
 ```
 
 ### with PIP <small>to be setup</small> { #with-pip data-toc-label="with pip" }

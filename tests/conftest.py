@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from sun_earth_geometry import SunEarthAnalyzer
+from fseg import SunEarthAnalyzer
 
 from .case_data import sun_position_data
 

@@ -3,7 +3,7 @@
 import warnings
 from typing import Dict, Union
 
-from sun_earth_geometry import _sun_earth_geometry
+from fseg import _fseg
 
 # spd = sp.SPData()
 
@@ -27,13 +27,13 @@ from sun_earth_geometry import _sun_earth_geometry
 # sp.spa_calculate(spd, True)
 
 if __name__ == "__main__":
-    if _sun_earth_geometry.__version__ >= "0.3":
+    if _fseg.__version__ >= "0.3":
         warnings.warn(
             "SunPositionAnalysis is deprecated; use SunEarthAnalyzer.",
             DeprecationWarning,
         )
     else:
-        from sun_earth_geometry._sun_earth_geometry import SunPositionAnalysis
+        from fseg._fseg import SunPositionAnalysis
 
         # spa = SunPositionAnalysis(year=2003, month=10, day=17,
         #     hour=12, minute=30, second=30,
