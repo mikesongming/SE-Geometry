@@ -91,6 +91,8 @@ class CMakeBuild(build_ext):
                 ]
                 build_args += ["--config", cfg]
 
+            assert cfg == "Release", "MSVC only support Release build-type"
+
         if sys.platform.startswith("darwin"):
             import sysconfig
 
@@ -137,5 +139,9 @@ setup(
     zip_safe=False,
     # extras_require={"test": ["pytest>=7.1", "numpy>=1.21"]},  move to tox.ini
     python_requires=">=3.10",
-    platforms=["macosx-10.9-x86_64"],
+    platforms=[
+        "cp310-macosx-10_9-x86_64",
+        "cp310-manylinux2014_x86_64",
+        "cp310-win_amd64",
+    ],
 )
