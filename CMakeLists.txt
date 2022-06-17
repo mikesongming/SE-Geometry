@@ -18,10 +18,15 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) # Less useful to do it for linking, see edit2
 endif(CCACHE_FOUND)
 
-find_package(pybind11 CONFIG)
-if(pybind11_FOUND)
-    message(STATUS "Found pybind11")
-endif(pybind11_FOUND)
+# fetch pybind11 when building
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Disable updating fetched content")
+
+include(FetchContent)
+FetchContent_Declare(pybind11
+    GIT_REPOSITORY https://github.com/pybind/pybind11.git
+    GIT_TAG v2.8.1
+)
+FetchContent_MakeAvailable(pybind11)
 
 add_subdirectory(src)
 add_subdirectory(python)

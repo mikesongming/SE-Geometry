@@ -14,3 +14,9 @@ __pycache__/
 site/
 
 .tox/
+
+# pytest
+.coverage
+coverage.xml
+coverage.text
+unit.xml
