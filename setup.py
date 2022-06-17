@@ -142,6 +142,6 @@ setup(
     platforms=[
         "cp310-macosx-10_9-x86_64",
         "cp310-manylinux2014_x86_64",
-        "cp310-win_amd64",
+        # "cp310-win_amd64",
     ],
 )
