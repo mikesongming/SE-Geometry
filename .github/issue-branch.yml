@@ -1,0 +1,27 @@
+# enable chatOPs
+mode: chatops
+
+# branchName: short
+branchName: '${issue.number}-${issue.title[0,64]}'
+branches:
+  - label: bug
+    prefix: fix/
+  - label: enhancement
+    prefix: feat/
+  - label: maintenance
+    prefix: maint/
+  - label: documentation
+    prefix: doc/
+  - label: '*'
+    skip: true
+
+# open PR related to the create branch
+openPR: true
+copyIssueDescriptionToPR: true
+copyIssueLabelsToPR: true
+copyIssueAssigneeToPR: true
+copyIssueProjectsToPR: true
+copyIssueMilestoneToPR: true
+
+# close Issue after merging PR
+autoCloseIssue: true

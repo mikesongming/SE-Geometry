@@ -1,0 +1,64 @@
+name-template: 'v$RESOLVED_VERSION 🌈'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features'
+    lables:
+      - feat
+      - feature
+      - enhancement
+  - title: '💣 Breaking Change'
+    label: breakthrough
+  - title: '🐛 Bug Fixes'
+    labels:
+      - bug
+      - fix
+      - bugfix
+  - title: '📝 Documentation'
+    labels:
+      - doc
+      - docs
+      - documentation
+  - title: '🔨 Maintenance'
+    labels:
+      - chore
+      - maint
+      - maintenance
+
+include-labels:
+  - feat
+  - feature
+  - enhancement
+  - breakthrough
+  - bug
+  - fix
+  - bugfix
+  - doc
+  - docs
+  - documentation
+  - chore
+  - maint
+  - maintenance
+
+change-template: '- $TITLE (#$NUMBER)'
+change-title-escapes: '\<*_&`@#' # add # and @ to disable mentions, and add ` to disable code blocks.
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+      - breakthrough
+  minor:
+    labels:
+      - 'minor'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'patch'
+      - 'bug'
+      - 'maintenance'
+  default: patch
+
+template: |
+  ## What’s Changed
+
+  $CHANGES

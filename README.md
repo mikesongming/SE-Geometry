@@ -9,6 +9,8 @@
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/mikesongming/SE-Geometry)
 ![GitHub](https://img.shields.io/github/license/mikesongming/SE-Geometry)
 
+![Statement Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mikesongming/560b8d67df4def72aedec192ebd597ca/raw/fseg_coverage.json)
+
 # Motivation
 
 When tring to build an autonomous [site planning](https://en.wikipedia.org/wiki/Site_plan) model, I was shocked by the _backwardness_ of [sunlight analysis](https://www.level.org.nz/site-analysis/sun/) technology in the Chinese real estate design industry:
