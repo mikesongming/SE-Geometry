@@ -43,6 +43,9 @@ FetchContent_Declare(pybind11
 )
 FetchContent_MakeAvailable(pybind11)
 
+# link math.h
+LINK_LIBRARIES(m)
+
 add_subdirectory(src)
 add_subdirectory(python)
 

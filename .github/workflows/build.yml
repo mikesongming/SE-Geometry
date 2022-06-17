@@ -40,8 +40,9 @@ jobs:
         python:
           - 'cp310'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Python3
         uses: actions/setup-python@v3
@@ -103,8 +104,8 @@ jobs:
         with:
           name: |
             wheel_macos
-            # wheel_linux
-            # wheel_windows
+            wheel_linux
+            wheel_windows
           failOnError: false
 
   build_sdist:
@@ -115,8 +116,9 @@ jobs:
       pkg_name:    ${{ steps.save.outputs.pkg_name }}
       pkg_version: ${{ steps.save.outputs.pkg_version }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v1
@@ -127,15 +129,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install build
-
-      - name: DEBUG
-        run: |
-          echo "BRANCH:"
-          git branch -q | grep '*'
-          echo "TAGS:"
-          git tag -l
-          echo "To find _version.py:"
-          if [ -f python/fseg/_version.py ]; then echo "_version.py exists: $(cat python/fseg/_version.py)"; else echo '_version.py not exists'; fi
 
       - name: Build sdist Package with Extension
         run: |
