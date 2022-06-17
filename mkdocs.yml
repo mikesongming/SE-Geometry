@@ -1,0 +1,99 @@
+site_name: FSEG - Fast Sun Earth Geometry
+site_author: Mike Song
+site_description: Gemoetric Algorithms for the Sun-Earth System
+site_url: https://mikesongming.github.io/SE-Geometry
+copyright: Copyright &copy; 2022 Mike Song
+
+
+repo_name: mikesongming/SE-Geometry
+repo_url: https://github.com/mikesongming/SE-Geometry
+# edit_uri: ""
+
+theme:
+  name: material
+  nav_style: light
+  logo: assets/images/logo.png
+  custom_dir: overrides
+  highlightjs: true
+  hljs_languages:
+   - yaml
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.expand
+    - navigation.sections
+    # - navigation.indexes
+    # - toc.integrate
+    - navigation.top
+  icon:
+    repo: fontawesome/brands/github
+
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+
+plugins:
+  - search
+  - include-markdown
+  - mkdocstrings
+
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/squidfunk
+      name: Material on Github
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/repository/docker/gnosoir/SE-Geometry
+      name: Material on DockerHub
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/mkdocs-material/
+      name: Material on PyPi
+
+# extra:
+#   alternate:
+#     - name: English
+#       link: /en/
+#       lang: en
+#     - name: Chinese
+#       link: /zh/
+#       lang: zh
+
+nav:
+  - Home: index.md
+  - Getting started:
+    - Installation: user-guide/install.md
+    - Usage: user-guide/usage.md
+  - Developer Guide:
+    - dev-guide/dev-guide.md
+  - Reference:
+    - SunEarthAnalyzer: reference/SunEarthAnalyzer.md
+    - DataClasses: reference/data.md
+  - About:
+    - Motivation: about/motive.md
+    - Contributing: about/contributing.md
+    - History: about/history.md
+    - License: about/license.md

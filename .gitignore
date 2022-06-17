@@ -1,0 +1,22 @@
+.vscode/
+.DS_Store
+
+build/
+dist/
+*.egg-info/
+
+python/fseg/_version.py
+
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+
+site/
+
+.tox/
+
+# pytest
+.coverage
+coverage.xml
+coverage.txt
+unit.xml

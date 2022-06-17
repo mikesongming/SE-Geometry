@@ -1,0 +1,38 @@
+name: Test Report as PR Comment
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        description: name of the artifact of test reports
+        default: test_reports
+        required: false
+        type: string
+      create-new-comment:
+        description: create new commend or update the old one
+        default: false
+        required: false
+        type: boolean
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  commentPR:
+    name: 🔖 comment-PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Reports
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: test_reports
+
+      - name: coverage comment
+        id: coverageComment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          create-new-comment: ${{ inputs.create-new-comment }}
+          pytest-coverage-path: ./test_reports/coverage.txt
+          junitxml-path: ./test_reports/unit.xml

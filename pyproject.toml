@@ -1,0 +1,94 @@
+[build-system]
+requires = [
+  "setuptools >= 61",
+  "wheel >= 0.37",
+  "build >= 0.7",
+  "versioningit >= 1.1",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fseg"
+authors = [{ "name" = "Mike Song", "email" = "gnosoir@hotmail.com" }]
+urls = { "Homepage" = "https://mikesongming.github.io/SE-Geometry" }
+description = "A python wrapper of algorithms for sun-earth geometry "
+readme = "README.md"
+license = { text = "LGPL-2.1" }
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Environment :: MacOS X",
+  # "Environment :: GPU",
+  # "Environment :: GPU :: NVIDIA CUDA",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+  "Operating System :: MacOS",
+  "Programming Language :: C++",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Scientific/Engineering :: GIS",
+]
+dynamic = ["version", "requires-python"]
+
+[tool.versioningit]
+write.file = "python/fseg/_version.py"
+next-version = "smallest-release"
+
+[tool.versioningit.vcs]
+method = "git"
+match = ["v*"]
+default-tag = "0.0.0"
+
+# Isort section
+# Read more here: https://pycqa.github.io/isort/docs/configuration/options.html
+[tool.isort]
+profile = "black"
+src_paths = ["python", "tests"]
+known_first_party = ["fseg", "_fseg"]
+
+# [tool.isort.import_headings]
+# stdlib = "built-in"
+# firstparty = "in project"
+# thirdparty = "3rd-party"
+# localfolder = "local"
+
+# Black section
+# Read more here: https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html#configuration-via-a-file
+[tool.black]
+line-length = 88
+
+# MyPy section
+[tool.mypy]
+
+# PyTest section
+[tool.pytest.ini_options]
+minversion = "7.0"
+markers = [
+  "mpi: mark tests for mpi implementation",
+  "gpu: mark tests for gpu implementation",
+]
+addopts = """-s --cache-clear \
+  --cov-report term-missing --cov=fseg \
+  --cov-fail-under=80 --cov-branch \
+  -rfExXs
+  """
+xfail_strict = true
+testpaths = ["tests"]
+
+# Towncrier section
+# Read more here: https://towncrier.readthedocs.io/en/latest/configuration.html
+[tool.towncrier]
+# version = "1.2.3"     ## to be given as cmd args
+# name="FSEG"
+filename = "CHANGELOG.md"
+directory = ".changelog/news"
+template = ".changelog/template.md"
+title_format = "## {name} v{version} ({project_date})"
+issue_format = "[#{issue}](https://github.com/mikesongming/SE-Geometry/issues/{issue})"
+start_string = "<!-- TOWNCRIER -->\n"
+underlines = ["", "", ""]
+wrap=true
+
+[tool.cibuildwheel]
+skip = "cp36-* cp37-* pp* *-manylinux_i686 *_aarch64 *_ppc64le *_s390x *-musllinux* *-win32 *_arm64"
+build-verbosity = "3"
