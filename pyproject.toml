@@ -32,6 +32,7 @@ dynamic = ["version", "requires-python"]
 
 [tool.versioningit]
 write.file = "python/fseg/_version.py"
+next-version = "smallest-release"
 
 [tool.versioningit.vcs]
 method = "git"
@@ -62,12 +63,17 @@ line-length = 88
 # PyTest section
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-k 'not deprecated' -ra"
-testpaths = ["tests"]
 markers = [
   "mpi: mark tests for mpi implementation",
   "gpu: mark tests for gpu implementation",
 ]
+addopts = """-s --cache-clear \
+  --cov-report term-missing --cov=fseg \
+  --cov-fail-under=80 --cov-branch \
+  -rfExXs
+  """
+xfail_strict = true
+testpaths = ["tests"]
 
 # Towncrier section
 # Read more here: https://towncrier.readthedocs.io/en/latest/configuration.html
@@ -82,3 +88,7 @@ issue_format = "[#{issue}](https://github.com/mikesongming/SE-Geometry/issues/{i
 start_string = "<!-- TOWNCRIER -->\n"
 underlines = ["", "", ""]
 wrap=true
+
+[tool.cibuildwheel]
+skip = "cp36-* cp37-* pp* *-manylinux_i686 *_aarch64 *_ppc64le *_s390x *-musllinux* *-win32 *_arm64"
+build-verbosity = "3"

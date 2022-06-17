@@ -18,5 +18,5 @@ site/
 # pytest
 .coverage
 coverage.xml
-coverage.text
+coverage.txt
 unit.xml
