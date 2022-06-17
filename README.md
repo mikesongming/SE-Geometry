@@ -9,6 +9,8 @@
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/mikesongming/SE-Geometry)
 ![GitHub](https://img.shields.io/github/license/mikesongming/SE-Geometry)
 
+![Statement Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mikesongming/560b8d67df4def72aedec192ebd597ca/raw/fseg_coverage.json)
+
 # Motivation
 
 When tring to build an autonomous [site planning](https://en.wikipedia.org/wiki/Site_plan) model, I was shocked by the _backwardness_ of [sunlight analysis](https://www.level.org.nz/site-analysis/sun/) technology in the Chinese real estate design industry:
@@ -38,7 +40,7 @@ To build by source, call a [PEP517](https://peps.python.org/pep-0517) compliant 
 python -m build
 ```
 
-For more details, please visit [INSTALLATION](https://mikesongming.github.io/SE-Geometry/user-guide/installation).
+For more details, please visit [INSTALLATION](https://mikesongming.github.io/SE-Geometry/user-guide/install/).
 
 # Contributors
 
@@ -46,7 +48,7 @@ For more details, please visit [INSTALLATION](https://mikesongming.github.io/SE-
 
 - Mike Song, <gnosoir@hotmail.com>
 
-More contributors and sponsors are welcome. Please visit [CONTRIBUTING](https://mikesongming.github.io/SE-Geometry/user-guide/contributing) for details.
+More contributors and sponsors are welcome. Please visit [CONTRIBUTING](https://mikesongming.github.io/SE-Geometry/about/contributing/) for details.
 
 
 # License

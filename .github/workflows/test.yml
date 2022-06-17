@@ -1,0 +1,119 @@
+name: Tests by pytest
+# collect unit tests and coverage data
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: os of runner which built the wheel
+        required: true
+        type: string  # Linux, Windows, or macOS
+      python_version:
+        description: python version
+        required: true
+        type: string
+      artifact_name:
+        description: name of the artifact of wheels
+        default: 'wheels'
+        required: false
+        type: string
+    secrets:
+      GIST_TOKEN:
+        required: true
+    outputs:
+      xml_reports:
+        description: artifact name of unit tests and coverage xml reports
+        value: ${{ jobs.testing.outputs.xml_reports }}
+      test_passed:
+        description: boolean of whether passed unit tests
+        value: ${{ jobs.testing.outputs.test_passed }}
+      coverage:
+        description: line coverage in percentage
+        value: ${{ jobs.testing.outputs.coverage }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  testing:
+    name: 🧪 run tests
+    runs-on: >-
+      ${{
+        inputs.os == 'Linux' && 'ubuntu-20.04' ||
+        (
+          inputs.os == 'Windows' && 'windows-2019' || 'macos-11'
+        )
+      }}
+    outputs:
+      xml_reports: test_reports
+      test_passed: ${{ env.test_passed }}
+      coverage: ${{ env.coverage }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download all wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: wheelhouse
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest pytest-cov
+
+      - name: Install the wheel
+        env:
+          OS_KW: >-
+            ${{
+              inputs.os == 'Linux' && 'manylinux' ||
+              (
+                inputs.os == 'Windows' && 'win' || 'macosx'
+              )
+            }}
+          WHEEL: >-
+            $(ls ./wheelhouse/*.whl | grep "$OS_KW" | head -n 1)
+        run: |
+          python -m pip install --force-reinstall ${{ env.WHEEL }}
+
+      - name: Test using pytest
+        id: test
+        run: |
+          python -m pytest --junit-xml unit.xml | tee coverage.txt
+
+      - name: Extract Info
+        if: ${{ always() }}
+        run: |
+          echo "test_passed=${{job.status == 'success'}}" >> $GITHUB_ENV
+          echo "coverage=$(coverage report | grep 'TOTAL' | awk '{print $NF}')" >> $GITHUB_ENV
+          echo "coverage_on_display=$(coverage report | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//' | awk -F '.' '{print $1}')" >> $GITHUB_ENV
+
+      - name: Upload Report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: test_reports
+          path: |
+            ./unit.xml
+            ./coverage.txt
+          retention-days: 3
+
+      - name: Create Awesome Badge
+        if: ${{ always() }}
+        uses: schneegans/dynamic-badges-action@v1.4.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: 560b8d67df4def72aedec192ebd597ca
+          filename: fseg_coverage.json
+          label: coverage
+          message: ${{ env.coverage }}
+          valColorRange: ${{ env.coverage_on_display }}
+          maxColorRange: 100
+          minColorRange: 0

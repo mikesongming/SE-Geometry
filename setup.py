@@ -130,9 +130,9 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     packages=find_packages(where="python"),
-    package_dir={"sun_earth_geometry": "python/sun_earth_geometry"},
-    ext_package="sun_earth_geometry",
-    ext_modules=[CMakeExtension("_sun_earth_geometry")],
+    package_dir={"fseg": "python/fseg"},
+    ext_package="fseg",
+    ext_modules=[CMakeExtension("_fseg")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     # extras_require={"test": ["pytest>=7.1", "numpy>=1.21"]},  move to tox.ini

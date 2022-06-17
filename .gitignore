@@ -5,10 +5,18 @@ build/
 dist/
 *.egg-info/
 
-python/sun_earth_geometry/_version.py
+python/fseg/_version.py
 
 __pycache__/
 .mypy_cache/
 .pytest_cache/
 
 site/
+
+.tox/
+
+# pytest
+.coverage
+coverage.xml
+coverage.txt
+unit.xml

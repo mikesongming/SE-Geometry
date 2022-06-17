@@ -1,0 +1,6 @@
+fseg  # mkdocs need to retrieve version
+
+mkdocs
+mkdocs-material
+mkdocs-include-markdown-plugin
+mkdocstrings

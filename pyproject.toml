@@ -8,7 +8,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sun_earth_geometry"
+name = "fseg"
 authors = [{ "name" = "Mike Song", "email" = "gnosoir@hotmail.com" }]
 urls = { "Homepage" = "https://mikesongming.github.io/SE-Geometry" }
 description = "A python wrapper of algorithms for sun-earth geometry "
@@ -31,7 +31,8 @@ classifiers = [
 dynamic = ["version", "requires-python"]
 
 [tool.versioningit]
-write.file = "python/sun_earth_geometry/_version.py"
+write.file = "python/fseg/_version.py"
+next-version = "smallest-release"
 
 [tool.versioningit.vcs]
 method = "git"
@@ -43,7 +44,7 @@ default-tag = "0.0.0"
 [tool.isort]
 profile = "black"
 src_paths = ["python", "tests"]
-known_first_party = ["sun_earth_geometry", "_sun_earth_geometry"]
+known_first_party = ["fseg", "_fseg"]
 
 # [tool.isort.import_headings]
 # stdlib = "built-in"
@@ -62,9 +63,32 @@ line-length = 88
 # PyTest section
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-k 'not deprecated' -ra"
-testpaths = ["tests"]
 markers = [
   "mpi: mark tests for mpi implementation",
   "gpu: mark tests for gpu implementation",
 ]
+addopts = """-s --cache-clear \
+  --cov-report term-missing --cov=fseg \
+  --cov-fail-under=80 --cov-branch \
+  -rfExXs
+  """
+xfail_strict = true
+testpaths = ["tests"]
+
+# Towncrier section
+# Read more here: https://towncrier.readthedocs.io/en/latest/configuration.html
+[tool.towncrier]
+# version = "1.2.3"     ## to be given as cmd args
+# name="FSEG"
+filename = "CHANGELOG.md"
+directory = ".changelog/news"
+template = ".changelog/template.md"
+title_format = "## {name} v{version} ({project_date})"
+issue_format = "[#{issue}](https://github.com/mikesongming/SE-Geometry/issues/{issue})"
+start_string = "<!-- TOWNCRIER -->\n"
+underlines = ["", "", ""]
+wrap=true
+
+[tool.cibuildwheel]
+skip = "cp36-* cp37-* pp* *-manylinux_i686 *_aarch64 *_ppc64le *_s390x *-musllinux* *-win32 *_arm64"
+build-verbosity = "3"

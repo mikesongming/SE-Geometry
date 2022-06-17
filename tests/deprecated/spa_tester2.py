@@ -1,4 +1,4 @@
-from sun_earth_geometry import SunEarthAnalyzer
+from fseg import SunEarthAnalyzer
 
 if __name__ == "__main__":
     sea = SunEarthAnalyzer()

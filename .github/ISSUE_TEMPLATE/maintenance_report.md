@@ -1,8 +1,8 @@
 ---
-name: Feature request
-about: Suggest new functionality for this project.
+name: Maintenance report
+about: Configuration and Pipeline upgrades
 title: ''
-labels: 'enhancement'
+labels: 'maintenance'
 assignees: ''
 
 ---
@@ -11,9 +11,9 @@ assignees: ''
 
 By submitting an Issue to this repository, you agree to the terms within the [Code of Conduct](https://github.com/mikesongming/SE-Geometry/blob/master/CODE-OF-CONDUCT.md).
 
-### Describe the problem you'd like to have solved
+### Describe the configuration and/or pipeline adjustment you'd like to make
 
-> A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+> A clear and concise description of what the difference is.
 
 ### Describe the ideal solution
 

@@ -8,7 +8,7 @@ from ._data import (
     TopoCentricSunPositionResult,
     safely_from_dict,
 )
-from ._sun_earth_geometry import SPA_Analyzer
+from ._fseg import SPA_Analyzer
 
 
 class SunEarthAnalyzer(object):
