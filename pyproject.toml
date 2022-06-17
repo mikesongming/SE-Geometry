@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-  "setuptools >= 61.2.0",
+  "setuptools >= 61",
   "wheel >= 0.37",
   "build >= 0.7",
   "versioningit >= 1.1",

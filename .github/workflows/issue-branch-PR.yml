@@ -11,6 +11,10 @@ on:
 jobs:
   create_issue_branch_job:
     runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'issue_comment' &&
+        (github.event.comment.body == '/cib' ||
+          github.event.comment.body == '/create-issue-branch')
     steps:
       - name: Create Issue Branch
         id: cib
