@@ -4,6 +4,7 @@ requires = [
   "wheel >= 0.37",
   "build >= 0.7",
   "versioningit >= 1.1",
+  "ninja >= 1.10",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -94,8 +95,6 @@ skip = "cp36-* cp37-* pp* *-manylinux_i686 *_aarch64 *_ppc64le *_s390x *-musllin
 build-verbosity = "3"
 build-frontend = "build"
 before-build = [
-    "git branch -q | grep '*'",
-    "git tag -l",
     """
       if [ -f python/fseg/_version.py ]; then
           echo "_version.py exists: $(cat python/fseg/_version.py)";
