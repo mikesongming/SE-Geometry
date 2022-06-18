@@ -4,6 +4,9 @@ name: Tests by pytest
 on:
   workflow_call:
     inputs:
+      ref:
+        required: true
+        type: string
       os:
         description: os of runner which built the wheel
         required: true
@@ -51,6 +54,8 @@ jobs:
       coverage: ${{ env.coverage }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Download all wheels
         uses: actions/download-artifact@v3

@@ -22,7 +22,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           EVENT_NAME: ${{ github.event_name }}
-
-      - name: Debug cib
-        run: |
-          echo ${{ steps.cib.outputs.branchName }}

@@ -9,22 +9,28 @@ cmake_policy(SET CMP0095 NEW)
 include(CMakePrintHelpers)
 
 if (MSVC)
+    # Tell cmake we want it to automate generating an export stub for the dll
+    SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
     # /Zc:preprocessor enables a token-based preprocessor that conforms to C99 and C++11 and later standards
     # /Zc:preprocessor option is available starting with VS2019 version 16.5
     # (according to https://docs.microsoft.com/en-us/cpp/build/reference/zc-preprocessor)
     # That version is equivalent to _MSC_VER==1925
-     # (according to https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros)
-     # CMake's ${MSVC_VERSION} is equivalent to _MSC_VER
-     # (according to https://cmake.org/cmake/help/latest/variable/MSVC_VERSION.html#variable:MSVC_VERSION)
-     if (MSVC_VERSION GREATER_EQUAL 1925)
-         add_compile_options(/Zc:preprocessor)
-     else()
-     message(FATAL_ERROR "MSVC compiler before VS2019 Update5 are not supported")
-     endif()
- endif()
+    # (according to https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros)
+    # CMake's ${MSVC_VERSION} is equivalent to _MSC_VER
+    # (according to https://cmake.org/cmake/help/latest/variable/MSVC_VERSION.html#variable:MSVC_VERSION)
+    if (MSVC_VERSION GREATER_EQUAL 1925)
+        cmake_print_variables(MSVC_VERSION)
+        add_compile_options(/Zc:preprocessor)
+    else()
+        message(FATAL_ERROR "MSVC compiler before VS2019 Update5 are not supported")
+    endif()
 
-# set default output path
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+else()
+    # link math.h
+    LINK_LIBRARIES(m)
+endif()
+
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
@@ -39,12 +45,10 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Disable updating fetched co
 include(FetchContent)
 FetchContent_Declare(pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.8.1
+    GIT_TAG v2.9.2
 )
 FetchContent_MakeAvailable(pybind11)
 
-# link math.h
-LINK_LIBRARIES(m)
 
 add_subdirectory(src)
 add_subdirectory(python)

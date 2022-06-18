@@ -4,6 +4,9 @@ name: Build Packages
 on:
   workflow_call:
     inputs:
+      ref:
+        required: true
+        type: string
       need_wheel:
         default: true
         required: false
@@ -36,12 +39,13 @@ jobs:
           - [ubuntu-20.04, manylinux_x86_64]
           - [macos-11, macosx_x86_64]
           # - [macos-12, macosx_x86_64]
-          # - [windows-2019, win_amd64]
+          - [windows-2019, win_amd64]
         python:
           - 'cp310'
     steps:
       - uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
 
       - name: Set up Python3
@@ -87,11 +91,11 @@ jobs:
           name: wheel_macos
           path: wheelhouse
 
-      # - name: Download windows wheel
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: wheel_windows
-      #     path: wheelhouse
+      - name: Download windows wheel
+        uses: actions/download-artifact@v3
+        with:
+          name: wheel_windows
+          path: wheelhouse
 
       - name: Upload collected wheels
         uses: actions/upload-artifact@v3
@@ -105,7 +109,7 @@ jobs:
           name: |
             wheel_macos
             wheel_linux
-            # wheel_windows
+            wheel_windows
           failOnError: false
 
   build_sdist:
@@ -118,6 +122,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
 
       - name: Set up Python 3.10
