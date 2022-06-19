@@ -52,6 +52,9 @@
 #ifndef __solar_position_algorithm_header
 #define __solar_position_algorithm_header
 
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 //enumeration for function codes to select desired final outputs from SPA
 enum {
@@ -179,9 +182,6 @@ typedef struct
 
 } spa_data;
 
-#ifdef __cplusplus
-extern "C"{
-#endif
 
 //-------------- Utility functions for other applications (such as NREL's SAMPA) --------------
 double deg2rad(double degrees);

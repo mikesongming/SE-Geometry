@@ -21,6 +21,9 @@ if (MSVC)
     else()
         message(FATAL_ERROR "MSVC compiler before VS2019 Update5 are not supported")
     endif()
+else()
+    # link math.h
+    LINK_LIBRARIES(m)
 endif()
 
 # set default output path
@@ -43,8 +46,6 @@ FetchContent_Declare(pybind11
 )
 FetchContent_MakeAvailable(pybind11)
 
-# link math.h
-LINK_LIBRARIES(m)
 
 add_subdirectory(src)
 add_subdirectory(python)
