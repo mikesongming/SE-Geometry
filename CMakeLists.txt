@@ -17,7 +17,8 @@ if (MSVC)
     # CMake's ${MSVC_VERSION} is equivalent to _MSC_VER
     # (according to https://cmake.org/cmake/help/latest/variable/MSVC_VERSION.html#variable:MSVC_VERSION)
     if (MSVC_VERSION GREATER_EQUAL 1925)
-        add_compile_options(/Zc:preprocessor)
+        # add_compile_options(/Zc:preprocessor)
+        message(STATUS "MSVC $MSVC_VERSION")
     else()
         message(FATAL_ERROR "MSVC compiler before VS2019 Update5 are not supported")
     endif()
@@ -42,7 +43,7 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Disable updating fetched co
 include(FetchContent)
 FetchContent_Declare(pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.8.1
+    GIT_TAG v2.9.2
 )
 FetchContent_MakeAvailable(pybind11)
 
