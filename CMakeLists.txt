@@ -9,6 +9,9 @@ cmake_policy(SET CMP0095 NEW)
 include(CMakePrintHelpers)
 
 if (MSVC)
+    # Tell cmake we want it to automate generating an export stub for the dll
+    SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
     # /Zc:preprocessor enables a token-based preprocessor that conforms to C99 and C++11 and later standards
     # /Zc:preprocessor option is available starting with VS2019 version 16.5
     # (according to https://docs.microsoft.com/en-us/cpp/build/reference/zc-preprocessor)
@@ -17,11 +20,12 @@ if (MSVC)
     # CMake's ${MSVC_VERSION} is equivalent to _MSC_VER
     # (according to https://cmake.org/cmake/help/latest/variable/MSVC_VERSION.html#variable:MSVC_VERSION)
     if (MSVC_VERSION GREATER_EQUAL 1925)
-        # add_compile_options(/Zc:preprocessor)
-        message(STATUS "MSVC $MSVC_VERSION")
+        cmake_print_variables(MSVC_VERSION)
+        add_compile_options(/Zc:preprocessor)
     else()
         message(FATAL_ERROR "MSVC compiler before VS2019 Update5 are not supported")
     endif()
+
 else()
     # link math.h
     LINK_LIBRARIES(m)
