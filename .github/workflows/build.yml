@@ -4,6 +4,9 @@ name: Build Packages
 on:
   workflow_call:
     inputs:
+      ref:
+        required: true
+        type: string
       need_wheel:
         default: true
         required: false
@@ -42,6 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
 
       - name: Set up Python3
@@ -118,6 +122,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
 
       - name: Set up Python 3.10
