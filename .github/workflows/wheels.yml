@@ -58,3 +58,4 @@ jobs:
       is_release: ${{ github.event_name == 'release' }}
       rev: ${{ needs.build_package.outputs.rev }}
       next_rev: ${{ needs.build_package.outputs.next_rev }}
+    secrets: inherit
