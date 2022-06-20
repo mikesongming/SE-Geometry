@@ -92,7 +92,7 @@ wrap=true
 
 [tool.cibuildwheel]
 skip = "cp36-* cp37-* pp* *-manylinux_i686 *_aarch64 *_ppc64le *_s390x *-musllinux* *-win32 *_arm64"
-build-verbosity = "3"
+build-verbosity = 1
 build-frontend = "build"
 before-build = [
   'git tag -l',

@@ -25,7 +25,7 @@ jobs:
           github.event.pull_request.head.ref || github.ref_name
         }}
       need_wheel: true
-      need_sdist: false
+      need_sdist: true
 
   debug_build:
     runs-on: ubuntu-latest
@@ -61,23 +61,6 @@ jobs:
       os: Linux
       python_version: "3.10"
     secrets: inherit
-
-  debug_test:
-    runs-on: ubuntu-latest
-    needs: test_test
-    env:
-      PASSED: ${{ needs.test_test.outputs.test_passed }}
-    steps:
-      - name: Download Reports
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ needs.test_test.outputs.xml_reports }}
-          path: test_reports
-
-      - name: List Reports
-        run: |
-          ls -a ./test_reports
-          [ ${PASSED} ] && echo 'Tests passed!'
 
   test_comment:
     needs: test_test
