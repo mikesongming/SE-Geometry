@@ -95,9 +95,9 @@ skip = "cp36-* cp37-* pp* *-manylinux_i686 *_aarch64 *_ppc64le *_s390x *-musllin
 build-verbosity = 1
 build-frontend = "build"
 before-build = [
-  'git tag -l',
-  'python -m pip install versioningit',
-  'python -m versioningit',
+  "'git describe --dirty --long --always --tags --match 'v*'",
+  "python -m pip install versioningit",
+  "python -m versioningit",
 ]
 
 [tool.cibuildwheel.linux]
