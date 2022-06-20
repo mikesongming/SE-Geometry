@@ -31,8 +31,6 @@ else()
     LINK_LIBRARIES(m)
 endif()
 
-# set default output path
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
