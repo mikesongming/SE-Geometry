@@ -16,6 +16,12 @@ on:
         required: false
         type: boolean
     outputs:
+      rev:
+        description: version of head ref
+        value: ${{ jobs.build_sdist.outputs.rev }}
+      next_rev:
+        description: next version of head ref
+        value: ${{ jobs.build_sdist.outputs.next_rev }}
       pkg_name:
         description: name of sdist
         value: ${{ jobs.build_sdist.outputs.pkg_name }}
@@ -117,6 +123,8 @@ jobs:
     if: ${{ inputs.need_sdist }}
     runs-on: ubuntu-latest
     outputs:
+      rev:    ${{ steps.save.outputs.rev }}
+      next_rev: ${{ steps.save.outputs.next_rev }}
       pkg_name:    ${{ steps.save.outputs.pkg_name }}
       pkg_version: ${{ steps.save.outputs.pkg_version }}
     steps:
@@ -133,6 +141,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          python -m pip install versioningit
           python -m pip install build
 
       - name: Build sdist Package with Extension
@@ -142,6 +151,8 @@ jobs:
       - name: Extract sdist package info
         run: |
           bash .github/scripts/extract_sdist_info.sh
+          echo "rev=$(python -m versioningit)" >> $GITHUB_ENV
+          echo "next_rev=$(python -m versioningit -n)" >> $GITHUB_ENV
 
       - name: Upload sdist as Artifact
         if: ${{ success() }}
@@ -154,5 +165,7 @@ jobs:
       - name: Write outputs
         id: save
         run: |
+          echo "::set-output name=rev::${{ env.rev }}"
+          echo "::set-output name=next_rev::${{ env.next_rev }}"
           echo "::set-output name=pkg_name::${{ env.pkg_name }}"
           echo "::set-output name=pkg_version::${{ env.pkg_version }}"
