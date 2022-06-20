@@ -1,0 +1,82 @@
+name: Publish to PYPI
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+      is_release:
+        required: true
+        type: boolean
+      rev:
+        description: version of head ref
+        default: ''
+        required: false
+        type: string
+      next_rev:
+        description: next version of head ref
+        default: ''
+        required: false
+        type: string
+      sdist_artifact:
+        default: 'sdist'
+        required: false
+        type: string
+      wheels_artifact:
+        default: 'wheels'
+        required: false
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  pypa_publish:
+    name: ✨ publish to PYPY
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Download sdist
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.sdist_artifact }}
+          path: dist
+
+      - name: Download all wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.wheels_artifact }}
+          path: dist
+
+      - name: Rename packages
+        if: ${{ ! inputs.is_release }}
+        env:
+          REV: ${{ inputs.rev }}
+          N_REV: ${{ inputs.next_rev }}
+        run: |
+          python .github/scripts/rename_test_packages.py
+
+      - name: Publish package to TestPyPI
+        if: ${{ ! inputs.is_release }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+          skip_existing: true
+          print_hash: true
+
+      - name: Publish package to PyPI
+        if: ${{ inputs.is_release }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          skip_existing: true
+          print_hash: true
