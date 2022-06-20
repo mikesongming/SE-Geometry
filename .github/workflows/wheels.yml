@@ -47,39 +47,14 @@ jobs:
     uses: ./.github/workflows/comment.yml
 
   pypa_publish:
-    name: ✨ publish to PYPY
     needs: [build_package, run_tests]
-    runs-on: ubuntu-latest
-    if: >-
-      needs.run_tests.outputs.test_passed
-    steps:
-      - name: Download sdist
-        uses: actions/download-artifact@v3
-        with:
-          name: sdist
-          path: dist
-
-      - name: Download all wheels
-        uses: actions/download-artifact@v3
-        with:
-          name: wheels
-          path: dist
-
-      - name: Publish package to TestPyPI
-        if: github.event_name != 'release'
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
-          print_hash: true
-
-      - name: Publish package to PyPI
-        if: github.event_name == 'release'
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          skip_existing: true
-          print_hash: true
+    uses: ./.github/workflows/publish_pypi.yml
+    if: needs.run_tests.outputs.test_passed
+    with:
+      ref: >-
+        ${{ github.event.pull_request &&
+          github.event.pull_request.head.ref || github.ref_name
+        }}
+      is_release: ${{ github.event_name == 'release' }}
+      rev: ${{ needs.build_package.outputs.rev }}
+      next_rev: ${{ needs.build_package.outputs.next_rev }}
