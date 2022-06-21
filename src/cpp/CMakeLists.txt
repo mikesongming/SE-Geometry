@@ -11,7 +11,7 @@ elseif(UNIX)
 endif()
 
 target_link_libraries(_fseg PRIVATE spa)
-target_include_directories(_fseg PRIVATE ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(_fseg PRIVATE ${PROJECT_SOURCE_DIR}/src/external)
 
 # # SDIST_VERSION_INFO is defined by setup.py and passed into the C++ code as a
 # # define (VERSION_INFO) here.

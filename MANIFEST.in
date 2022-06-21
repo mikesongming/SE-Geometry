@@ -1,3 +1,2 @@
 include CMakeLists.txt
 recursive-include src *
-recursive-include python *

@@ -5,7 +5,7 @@ build/
 dist/
 *.egg-info/
 
-python/fseg/_version.py
+src/python/fseg/_version.py
 
 __pycache__/
 .mypy_cache/
