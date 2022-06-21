@@ -3,6 +3,7 @@ name: Wheels building
 on:
   push:
   pull_request:
+    types: [opened, reopened]
   issue_comment:
     types: created
   release:
@@ -15,11 +16,11 @@ jobs:
   build_package:
     uses: ./.github/workflows/build.yml
     if: >-
-      contains(github.event.head_commit.message, '[wheel build]') ||
+      contains(github.event.head_commit.message, '[build]') ||
       github.event_name == 'schedule' ||
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'release' ||
-      (github.event_name == 'pull_request' && contains(github.event.action, 'opened')) ||
+      github.event_name == 'pull_request' ||
       (github.event.issue.pull_request && github.event.comment.body == '/build')
     with:
       ref: >-
@@ -27,7 +28,6 @@ jobs:
           github.event.pull_request.head.ref || github.ref_name
         }}
       need_wheel: true
-      need_sdist: true
 
   run_tests:
     needs: build_package
@@ -51,11 +51,5 @@ jobs:
     uses: ./.github/workflows/publish_pypi.yml
     if: needs.run_tests.outputs.test_passed
     with:
-      ref: >-
-        ${{ github.event.pull_request &&
-          github.event.pull_request.head.ref || github.ref_name
-        }}
       is_release: ${{ github.event_name == 'release' }}
-      rev: ${{ needs.build_package.outputs.rev }}
-      next_rev: ${{ needs.build_package.outputs.next_rev }}
     secrets: inherit
