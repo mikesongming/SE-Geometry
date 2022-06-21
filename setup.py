@@ -135,8 +135,8 @@ class CMakeBuild(build_ext):
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    packages=find_packages(where="python"),
-    package_dir={"fseg": "python/fseg"},
+    packages=find_packages(where="src/python"),
+    package_dir={"fseg": "src/python/fseg"},
     ext_package="fseg",
     ext_modules=[CMakeExtension("_fseg")],
     cmdclass={"build_ext": CMakeBuild},

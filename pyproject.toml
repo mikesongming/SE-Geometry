@@ -34,7 +34,7 @@ dynamic = ["version", "requires-python"]
 # versioningit section
 # Read more here: https://versioningit.readthedocs.io/en/stable/
 [tool.versioningit]
-write.file = "python/fseg/_version.py"
+write.file = "src/python/fseg/_version.py"
 next-version = "smallest-release"
 
 [tool.versioningit.vcs]
