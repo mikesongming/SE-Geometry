@@ -11,17 +11,7 @@ on:
         default: true
         required: false
         type: boolean
-      need_sdist:
-        default: true
-        required: false
-        type: boolean
     outputs:
-      rev:
-        description: version of head ref
-        value: ${{ jobs.build_sdist.outputs.rev }}
-      next_rev:
-        description: next version of head ref
-        value: ${{ jobs.build_sdist.outputs.next_rev }}
       pkg_name:
         description: name of sdist
         value: ${{ jobs.build_sdist.outputs.pkg_name }}
@@ -36,6 +26,7 @@ defaults:
 jobs:
   build_wheel:
     name: 🚀 CIBW (${{matrix.buildplat[0]}}_${{matrix.python}})
+    needs: build_sdist
     if: ${{ inputs.need_wheel }}
     runs-on: ${{ matrix.buildplat[0] }}
     strategy:
@@ -62,6 +53,7 @@ jobs:
       - name: Build wheel with CIBW
         uses: pypa/cibuildwheel@v2.6.0
         env:
+          CIBW_BEFORE_BUILD: "pip install versioningit && python .github/scripts/tweak_tag_in_cibw.py"
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}
           CIBW_TEST_REQUIRES: pytest pytest-cov
           CIBW_TEST_COMMAND: pytest -v --no-cov {package}/tests
@@ -81,9 +73,9 @@ jobs:
 
   collect_wheels:
     name: 🫘 collect wheels
+    needs: build_wheel
     if: ${{ inputs.need_wheel }}
     runs-on: ubuntu-latest
-    needs: build_wheel
     steps:
       - name: Download linux wheel
         uses: actions/download-artifact@v3
@@ -120,7 +112,6 @@ jobs:
 
   build_sdist:
     name: 📦 build sdist
-    if: ${{ inputs.need_sdist }}
     runs-on: ubuntu-latest
     outputs:
       rev:    ${{ steps.save.outputs.rev }}
