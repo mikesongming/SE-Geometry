@@ -13,8 +13,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_package:
-    uses: ./.github/workflows/build.yml
+  get_trigger_ref:
+    name: Get Head Ref of Triggering
     if: >-
       contains(github.event.head_commit.message, '[build]') ||
       github.event_name == 'schedule' ||
@@ -22,21 +22,47 @@ jobs:
       github.event_name == 'release' ||
       github.event_name == 'pull_request' ||
       (github.event.issue.pull_request && github.event.comment.body == '/build')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      head_ref: ${{ steps.trigger_ref.outputs.value }}
+    steps:
+      - uses: haya14busa/action-cond@v1
+        id: pr_or_push_ref
+        with:
+          cond: ${{ github.event_name == 'pull_request' }}
+          if_true: ${{ github.event.pull_request.head.ref }}
+          if_false: ${{ github.ref_name }}
+
+      - uses: xt0rted/pull-request-comment-branch@v1
+        if: github.event_name == 'issue_comment'
+        id: pr_comment_ref
+
+      - uses: haya14busa/action-cond@v1
+        id: trigger_ref
+        with:
+          cond: ${{ github.event_name != 'issue_comment' }}
+          if_true: ${{ steps.pr_or_push_ref.outputs.value }}
+          if_false: ${{ steps.pr_comment_ref.outputs.head_ref }}
+
+      - name: Show Trigger REF
+        run: |
+          echo ${{ steps.trigger_ref.outputs.value }}
+
+  build_package:
+    needs: get_trigger_ref
+    uses: ./.github/workflows/build.yml
     with:
-      ref: >-
-        ${{ github.event.pull_request &&
-          github.event.pull_request.head.ref || github.ref_name
-        }}
+      ref: ${{ needs.get_trigger_ref.outputs.head_ref }}
       need_wheel: true
 
   run_tests:
-    needs: build_package
+    needs: [get_trigger_ref, build_package]
     uses: ./.github/workflows/test.yml
     with:
-      ref: >-
-        ${{ github.event.pull_request &&
-          github.event.pull_request.head.ref || github.ref_name
-        }}
+      ref: ${{ needs.get_trigger_ref.outputs.head_ref }}
       os: Linux
       python_version: "3.10"
     secrets: inherit
