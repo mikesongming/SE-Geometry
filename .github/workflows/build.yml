@@ -11,13 +11,6 @@ on:
         default: true
         required: false
         type: boolean
-    outputs:
-      pkg_name:
-        description: name of sdist
-        value: ${{ jobs.build_sdist.outputs.pkg_name }}
-      pkg_version:
-        description: version of sdist
-        value: ${{ jobs.build_sdist.outputs.pkg_version }}
 
 defaults:
   run:
@@ -56,7 +49,6 @@ jobs:
           CIBW_BEFORE_BUILD: >-
             pip install versioningit &&
             python .github/scripts/tweak_tag_in_cibw.py
-
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}
           CIBW_TEST_REQUIRES: pytest pytest-cov
           CIBW_TEST_COMMAND: pytest -v --no-cov {package}/tests
@@ -116,11 +108,6 @@ jobs:
   build_sdist:
     name: 📦 build sdist
     runs-on: ubuntu-latest
-    outputs:
-      rev:    ${{ steps.save.outputs.rev }}
-      next_rev: ${{ steps.save.outputs.next_rev }}
-      pkg_name:    ${{ steps.save.outputs.pkg_name }}
-      pkg_version: ${{ steps.save.outputs.pkg_version }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -140,26 +127,13 @@ jobs:
 
       - name: Build sdist Package with Extension
         run: |
+          python .github/scripts/tweak_tag_in_cibw.py
           python -m build -s
-
-      - name: Extract sdist package info
-        run: |
-          bash .github/scripts/extract_sdist_info.sh
-          echo "rev=$(python -m versioningit)" >> $GITHUB_ENV
-          echo "next_rev=$(python -m versioningit -n)" >> $GITHUB_ENV
 
       - name: Upload sdist as Artifact
         if: ${{ success() }}
         uses: actions/upload-artifact@v3
         with:
           name: sdist
-          path: ${{ env.pkg_sdist }}
+          path: dist/*.tar.gz
           retention-days: 3
-
-      - name: Write outputs
-        id: save
-        run: |
-          echo "::set-output name=rev::${{ env.rev }}"
-          echo "::set-output name=next_rev::${{ env.next_rev }}"
-          echo "::set-output name=pkg_name::${{ env.pkg_name }}"
-          echo "::set-output name=pkg_version::${{ env.pkg_version }}"
