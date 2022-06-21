@@ -31,6 +31,8 @@ classifiers = [
 ]
 dynamic = ["version", "requires-python"]
 
+# versioningit section
+# Read more here: https://versioningit.readthedocs.io/en/stable/
 [tool.versioningit]
 write.file = "python/fseg/_version.py"
 next-version = "smallest-release"
@@ -59,9 +61,11 @@ known_first_party = ["fseg", "_fseg"]
 line-length = 88
 
 # MyPy section
+# Read more here: https://mypy.readthedocs.io/en/stable/
 [tool.mypy]
 
 # PyTest section
+# Read more here: https://docs.pytest.org/ https://pytest-cov.readthedocs.io/en/latest/index.html
 [tool.pytest.ini_options]
 minversion = "7.0"
 markers = [
@@ -90,6 +94,8 @@ start_string = "<!-- TOWNCRIER -->\n"
 underlines = ["", "", ""]
 wrap=true
 
+# cibuildwheel section
+# Read more here: https://cibuildwheel.readthedocs.io/en/stable/
 [tool.cibuildwheel]
 skip = "cp36-* cp37-* pp* *-manylinux_i686 *_aarch64 *_ppc64le *_s390x *-musllinux* *-win32 *_arm64"
 build-verbosity = 1
