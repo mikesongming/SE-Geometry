@@ -16,7 +16,7 @@ branches:
     skip: true
 
 # open PR related to the create branch
-openPR: true
+openDraftPR: true
 copyIssueDescriptionToPR: true
 copyIssueLabelsToPR: true
 copyIssueAssigneeToPR: true

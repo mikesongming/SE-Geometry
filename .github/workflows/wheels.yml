@@ -3,7 +3,7 @@ name: Wheels building
 on:
   push:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, ready_for_review]
   issue_comment:
     types: created
   release:
@@ -69,7 +69,7 @@ jobs:
 
   update_PR_Comment:
     needs: run_tests
-    if: ${{ github.event.pull_request || github.event.issue.pull_request }}
+    if: github.event_name == 'pull_request'
     uses: ./.github/workflows/comment.yml
 
   pypa_publish:
