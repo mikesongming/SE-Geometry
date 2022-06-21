@@ -53,7 +53,10 @@ jobs:
       - name: Build wheel with CIBW
         uses: pypa/cibuildwheel@v2.6.0
         env:
-          CIBW_BEFORE_BUILD: "pip install versioningit && python .github/scripts/tweak_tag_in_cibw.py"
+          CIBW_BEFORE_BUILD: >-
+            pip install versioningit &&
+            python .github/scripts/tweak_tag_in_cibw.py
+
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}
           CIBW_TEST_REQUIRES: pytest pytest-cov
           CIBW_TEST_COMMAND: pytest -v --no-cov {package}/tests
