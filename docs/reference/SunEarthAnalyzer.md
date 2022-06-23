@@ -1,3 +1,2 @@
-# SunEarthAnalyzer
 
 ::: fseg.SunEarthAnalyzer
