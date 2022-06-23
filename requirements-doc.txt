@@ -1,6 +1,7 @@
-fseg  # mkdocs need to retrieve version
+# fseg  # mkdocs need to retrieve version
 
-mkdocs
-mkdocs-material
-mkdocs-include-markdown-plugin
+mkdocs>=1.3.0
+mkdocs-material>=8.3
+mkdocs-include-markdown-plugin>=3.5
 mkdocstrings
+mkdocstrings-python
