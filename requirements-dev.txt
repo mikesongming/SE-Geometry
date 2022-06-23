@@ -1,9 +1,13 @@
-tox
-tox-conda
-pre-commit
+tox>=3.25.0
+build>=0.7.0
+ninja>=1.10
+versioningit>=2
+towncrier
+
+pre-commit>=2.19
+flake8>=4
+black>=22
+isort>=5.10
 mypy
-flake8
-black
-isort
 
 -r requirements-test.txt

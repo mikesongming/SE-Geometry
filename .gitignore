@@ -20,3 +20,5 @@ site/
 coverage.xml
 coverage.txt
 unit.xml
+
+mydev/

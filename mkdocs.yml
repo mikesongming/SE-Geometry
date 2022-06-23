@@ -11,12 +11,12 @@ repo_url: https://github.com/mikesongming/SE-Geometry
 
 theme:
   name: material
-  nav_style: light
+  # nav_style: dark
   logo: assets/images/logo.png
   custom_dir: overrides
-  highlightjs: true
-  hljs_languages:
-   - yaml
+  # highlightjs: true
+  # hljs_languages:
+  #  - yaml
   features:
     - navigation.tabs
     - navigation.tabs.sticky
