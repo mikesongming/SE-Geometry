@@ -1,10 +1,10 @@
 {% macro issue_url(value) -%}
 {%- if value.startswith("PR") -%}
-[PR\#{{ value[2:] }}](https://github.com/mikesongming/gh_demo/pull/{{ value[2:] }})
+[PR\#{{ value[2:] }}](https://github.com/mikesongming/SE-Geometry/pull/{{ value[2:] }})
 {%- elif value.startswith("C") -%}
-[C\#{{value[1:] }}](https://github.com/mikesongming/gh_demo/commit/{{ value[1:] }})
+[{{value[1:8] }}](https://github.com/mikesongming/SE-Geometry/commit/{{ value[1:] }})
 {%- else -%}
-[{{ value }}](https://github.com/mikesongming/gh_demo/issues/{{ value }})
+[{{ value }}](https://github.com/mikesongming/SE-Geometry/issues/{{ value|replace('#','') }})
 {%- endif -%}
 {%- endmacro -%}
 
