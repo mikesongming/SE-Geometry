@@ -6,13 +6,29 @@ on:
     paths:
       - docs
       - overrides
+  workflow_dispatch:
+
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-python@v3
         with:
           python-version: 3.10
-      - run: pip install mkdocs-material
-      - run: mkdocs gh-deploy --force
+
+      - name: Install tox>=3.25.0
+        run: pip install "tox>=3.25.0"
+
+      - name: Generate CHANGELOG.md using towncrier
+        run: tox -e changes
+
+      - name: Build docs using mkdocs
+        run: tox -e docs
+
+      - name: Deploy to GH Pages
+        run: mkdocs gh-deploy --force
