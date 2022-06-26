@@ -80,20 +80,6 @@ addopts = """--cache-clear \
 xfail_strict = true
 testpaths = ["tests"]
 
-# Towncrier section
-# Read more here: https://towncrier.readthedocs.io/en/latest/configuration.html
-[tool.towncrier]
-# version = "1.2.3"     ## to be given as cmd args
-# name="FSEG"
-filename = "CHANGELOG.md"
-directory = ".changelog/news"
-template = ".changelog/template.md"
-title_format = "## {name} v{version} ({project_date})"
-issue_format = "[#{issue}](https://github.com/mikesongming/SE-Geometry/issues/{issue})"
-start_string = "<!-- TOWNCRIER -->\n"
-underlines = ["", "", ""]
-wrap=true
-
 # cibuildwheel section
 # Read more here: https://cibuildwheel.readthedocs.io/en/stable/
 [tool.cibuildwheel]

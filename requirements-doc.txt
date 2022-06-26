@@ -1,5 +1,6 @@
 # fseg  # mkdocs need to retrieve version
 
+towncrier==21.9.0
 mkdocs-material>=8.3
 mkdocs-include-markdown-plugin>=3.5
 mkdocstrings

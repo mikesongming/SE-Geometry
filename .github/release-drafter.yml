@@ -2,7 +2,7 @@ name-template: 'v$RESOLVED_VERSION 🌈'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
   - title: '🚀 Features'
-    lables:
+    labels:
       - feat
       - feature
       - enhancement
@@ -18,7 +18,7 @@ categories:
       - doc
       - docs
       - documentation
-  - title: '🔨 Maintenance'
+  - title: '🛠️ Maintenance'
     labels:
       - chore
       - maint
@@ -39,7 +39,7 @@ include-labels:
   - maint
   - maintenance
 
-change-template: '- $TITLE (#$NUMBER)'
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
 change-title-escapes: '\<*_&`@#' # add # and @ to disable mentions, and add ` to disable code blocks.
 
 version-resolver:

@@ -1,0 +1,42 @@
+[tool.towncrier]
+filename = "CHANGELOG.md"
+directory = ".changelog/news"
+template = ".changelog/template.md.j2"
+start_string = "<!-- towncrier release notes start -->"
+single_file = true
+wrap=true
+
+  [[tool.towncrier.type]]
+  directory = "api"
+  name = ":bulb: API Changes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "feature"
+  name = ":rocket: Features"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "bug"
+  name = ":bug: Bug Fixes"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "docs"
+  name = ":memo: Documentation Improvements"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "dev"
+  name = ":sparkles: Development Milestone"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "maint"
+  name = ":hammer_and_wrench: Maintenance"
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = "author"
+  name = ":gift: Contributors"
+  showcontent = true
