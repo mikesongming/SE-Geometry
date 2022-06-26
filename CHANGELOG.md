@@ -2,6 +2,29 @@
 
 <!-- towncrier release notes start -->
 
+## **v0.7.5** (2022-06-27)
+
+### :rocket: Features
+
+- [PR\#20](https://github.com/mikesongming/SE-Geometry/pull/20) Adopt Tox for
+  local pytest & mkdocs
+
+- [#18](https://github.com/mikesongming/SE-Geometry/issues/18) Add towncrier
+  news collection
+
+
+### :memo: Documentation Improvements
+
+- [PR\#23](https://github.com/mikesongming/SE-Geometry/pull/23) Supplement
+  change logs from v0.5.0 to v0.7.5
+
+
+### :hammer_and_wrench: Maintenance
+
+- [PR\#23](https://github.com/mikesongming/SE-Geometry/pull/23) Add workflow to
+  build changelog and docs, then publish to GH Pages
+
+
 ## **v0.7.4** (2022-06-21)
 
 ### :bug: Bug Fixes
