@@ -2,6 +2,20 @@
 
 <!-- towncrier release notes start -->
 
+## **v0.7.4** (2022-06-21)
+
+### :bug: Bug Fixes
+
+- [PR\#14](https://github.com/mikesongming/SE-Geometry/pull/14) tweak tag in
+  build_sdist and build_wheel by CIBW
+
+
+### :hammer_and_wrench: Maintenance
+
+- [PR\#17](https://github.com/mikesongming/SE-Geometry/pull/17) directory
+  refactoring
+
+
 ## **v0.7.2.1** (2022-06-21)
 
 ### :bug: Bug Fixes
