@@ -2,6 +2,14 @@
 
 <!-- towncrier release notes start -->
 
+## **v0.6.0** (2022-06-26)
+
+### :hammer_and_wrench: Maintenance
+
+- [PR\#6](https://github.com/mikesongming/gh_demo/pull/6) customize github
+  action workflows for CI
+
+
 ## **v0.5.0** (2022-06-26)
 
 ### :sparkles: Development Milestone
