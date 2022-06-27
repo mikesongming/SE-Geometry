@@ -1,43 +1,40 @@
-# Getting started
 
 FSEG is implemented as a python package with a pybind11 extension.
-Currently, you can only install FSEG from source since the project is at
-"Pre-Alpha" stage. Later, installation with pip is  more recommended.
+Currently, the project is at _Pre-Alpha_ stage, and you can install FSEG
+either from PYPI or from source. Later, installation with Anaconda is  more recommended.
 
-## Installation
+## with PIP
 
-### pre-requirements
+```sh
+pip install FSEG
+```
 
-Since we need to compile backend extensions before installing the package,
-it is required that [cmake](https://cmake.org) and [pybind11](https://pybind11.readthedocs.io/) installed beforehand.
-
-- MacOSX with [Homebrew](https://brew.sh/)
-    ```sh
-    brew install cmake pybind11
-    ```
-
-### with GIT
+## with GIT
 <!-- <small>recommended</small> { #with-git data-toc-label="with git" } -->
+- pre-requirements
 
-Source code of FSEG can be cloned from [Github](https://github.com) by:
+It is required that [cmake](https://cmake.org) and C++ compiler installed beforehand.
+[Anaconda](https://www.anaconda.com/) is also needed to manager python envs.
+
+For example, on MacOSX with [Homebrew](https://brew.sh/):
+```sh
+brew install anaconda
+brew install cmake
+```
+
+- clone source code by:
 ```sh
 git clone https://github.com/mikesongming/SE-Geometry.git
 ```
 
+- build and install
+
 After changing to the source directory, it is recommended to use [PEP517](https://peps.python.org/pep-0517)-compatible build-system to package the wheel:
 ```sh
-python -m build
+python -m build -w
 ```
 
-If successful, we can install the wheel by pip:
+If successful, install the wheel by pip:
 ```sh
 pip install dist/fseg-${ver}-${plat_name}_${arch}.whl
-```
-
-### with PIP <small>to be setup</small> { #with-pip data-toc-label="with pip" }
-
-Ideally, you can install with:
-
-```sh
-pip install FSEG
 ```
