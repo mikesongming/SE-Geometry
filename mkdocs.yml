@@ -23,7 +23,7 @@ theme:
     - navigation.expand
     - navigation.sections
     # - navigation.indexes
-    # - toc.integrate
+    - toc.integrate
     - navigation.top
   icon:
     repo: fontawesome/brands/github
@@ -53,6 +53,13 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+  - pymdownx.superfences:
+      # renders textual graph descriptions into Mermaid graphs
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
 
 
 plugins:
