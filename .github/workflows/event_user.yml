@@ -1,0 +1,35 @@
+name: Event Username
+
+on:
+  workflow_call:
+    outputs:
+      username:
+        description: name of user triggering the event
+        value: ${{ jobs.whoami.outputs.username }}
+      email:
+        description: no-reply email of user
+        value: ${{ jobs.whoami.outputs.email }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  whoami:
+    name: Extract name from webhook payload
+    runs-on: ubuntu-latest
+    outputs:
+      username: ${{ steps.format.outputs.username }}
+      email: ${{ steps.format.outputs.email }}
+    env:
+      SENDER_HTML_URL: ${{github.event.sender.html_url}}
+    steps:
+      - id: extract
+        run: |
+          echo "SENDER_HTML_URL:" $SENDER_HTML_URL
+          echo "USERNAME=$(echo $SENDER_HTML_URL | awk -F '/' '{print $NF}')" >> $GITHUB_ENV
+
+      - id: format
+        run: |
+          echo "::set-output name=username::$USERNAME"
+          echo "::set-output name=email::$USERNAME@users.noreply.github.com"

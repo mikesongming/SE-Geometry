@@ -10,12 +10,21 @@ on:
 
 
 jobs:
+  whoami:
+    uses: ./.github/workflows/event_user.yml
+
   deploy:
+    needs: whoami
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Configure Git user.name and user.email
+        run: |
+          git config --global user.email ${{needs.whoami.outputs.email}}
+          git config --global user.name ${{needs.whoami.outputs.username}}
 
       - uses: actions/setup-python@v3
         with:
@@ -27,11 +36,8 @@ jobs:
       - name: Update CHANGELOG.md using towncrier
         run: tox -e changes
 
-      - name: Build docs using mkdocs
-        run: tox -e docs
-
       - name: Push repository
         run: git push origin
 
       - name: Deploy to GH Pages
-        run: mkdocs gh-deploy --force
+        run: tox -e deploy-docs
