@@ -2,6 +2,26 @@
 
 <!-- towncrier release notes start -->
 
+## **v0.7.6** (2022-06-28)
+
+### :bug: Bug Fixes
+
+- [30e2f2e](https://github.com/mikesongming/SE-Geometry/commit/30e2f2e) fix
+  that collect_news changed last head commit
+
+
+### :memo: Documentation Improvements
+
+- [PR\#22](https://github.com/mikesongming/SE-Geometry/pull/22) Update
+  Documents: user-guide/install.md dev-guide/
+
+
+### :hammer_and_wrench: Maintenance
+
+- [PR\#22](https://github.com/mikesongming/SE-Geometry/pull/22) Use
+  [mermaid-js](https://mermaid-js.github.io/mermaid/) to draw UML graphs
+
+
 ## **v0.7.5** (2022-06-27)
 
 ### :rocket: Features
