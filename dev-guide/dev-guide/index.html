@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://mikesongming.github.io/SE-Geometry/dev-guide/dev-guide/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.8">
     
     
       
@@ -23,11 +23,12 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.1d29e8d0.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
         
+      
       
     
     
@@ -267,7 +268,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="FSEG - Fast Sun Earth Geometry" class="md-nav__button md-logo" aria-label="FSEG - Fast Sun Earth Geometry" data-md-component="logo">
       
@@ -317,7 +320,7 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
@@ -438,43 +441,56 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    Getting Started
+  <a href="#local-development-procedure" class="md-nav__link">
+    Local Development Procedure
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pre-commit-checks" class="md-nav__link">
-    Pre-commit checks
+  <a href="#library-design" class="md-nav__link">
+    Library Design
+  </a>
+  
+    <nav class="md-nav" aria-label="Library Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-flowchart" class="md-nav__link">
+    1. Flowchart
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-sequence-diagram" class="md-nav__link">
+    2. Sequence Diagram
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-class-diagram" class="md-nav__link">
+    3. Class Diagram
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests-by-pytest" class="md-nav__link">
+    Tests by Pytest
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#tests" class="md-nav__link">
-    Tests
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#write-documents" class="md-nav__link">
-    Write Documents
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#deploy-to-local-pypi" class="md-nav__link">
-    Deploy to Local PyPi
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#todo" class="md-nav__link">
-    ToDo
+  <a href="#documentation-preivew" class="md-nav__link">
+    Documentation Preivew
   </a>
   
 </li>
@@ -505,7 +521,7 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" data-md-state="indeterminate" type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
       
       
@@ -567,7 +583,7 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" data-md-state="indeterminate" type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
       
       
       
@@ -653,74 +669,6 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    Getting Started
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pre-commit-checks" class="md-nav__link">
-    Pre-commit checks
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tests" class="md-nav__link">
-    Tests
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#write-documents" class="md-nav__link">
-    Write Documents
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#deploy-to-local-pypi" class="md-nav__link">
-    Deploy to Local PyPi
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#todo" class="md-nav__link">
-    ToDo
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
@@ -733,20 +681,166 @@
 
 
 <h1 id="developers-guide">Developer's Guide</h1>
-<h2 id="getting-started">Getting Started</h2>
-<p>prepare the environment on Mac</p>
-<h2 id="pre-commit-checks">Pre-commit checks</h2>
-<h2 id="tests">Tests</h2>
-<h2 id="write-documents">Write Documents</h2>
-<h2 id="deploy-to-local-pypi">Deploy to Local PyPi</h2>
-<h2 id="todo">ToDo</h2>
+<h2 id="local-development-procedure">Local Development Procedure</h2>
+<ol>
+<li>Install <a href="https://www.anaconda.com/">Anaconda</a> on System</li>
+<li>Install <a href="https://cmake.org">CMake</a> on System</li>
+<li>Install C++/C Compiler on System, w.r.t. <a href="https://mikesongming.github.io/SE-Geometry/#supported-platforms">supported platforms</a></li>
+<li>Checkout issue related branch from <a href="https://github.com/mikesongming/SE-Geometry">Github</a></li>
+<li>Prepare Python environment, either by
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip install -r requirements-dev.txt
+</code></pre></div>
+or
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip install tox &amp;&amp; tox -e dev
+</code></pre></div></li>
+<li>Browse and edit source code as your wish, <a href="https://code.visualstudio.com/">VSCode</a> recommened as the IDE</li>
+<li>Broadcast your work using <a href="https://towncrier.readthedocs.io/en/latest/">towncrier</a> by:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>towncrier create {source}.{type} --edit
+</code></pre></div>
+where {type} is one of:<blockquote>
+<ul>
+<li>feature: for new features</li>
+<li>api: for API changes</li>
+<li>bug: for bug fixes</li>
+<li>maint: for maintenance and ci related</li>
+<li>dev: for breakthrough changes/milestone</li>
+<li>docs: for documentation changes</li>
+<li>author: for contributor names</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p>and where the {source} part of the filename is:</p>
+<blockquote>
+<ul>
+<li>42 when the change is described in issue 42</li>
+<li>PR42 when the change has been implemented in pull request 42, and there is no associated issue</li>
+<li>Cabcdef when the change has been implemented in changeset abcdef, and there is no associated issue or pull request.</li>
+<li>username for contributors (author extention). It should be the username part of their commits’ email address.</li>
+</ul>
+</blockquote>
+<h2 id="library-design">Library Design</h2>
+<!--
+empowered by [Mermaid-Js](https://mermaid-js.github.io/mermaid/)
+-->
+<h3 id="1-flowchart">1. Flowchart</h3>
+<pre class="mermaid"><code>flowchart LR
+    i1((Observatory))
+    i2((OBS_TIME_T))
+    a1[SunEarthAnalyzer]
+    a2[interface of&lt;br&gt;SPA_Analyzer]
+    b1[SPA_Analyzer]
+    b2[(C implementation of&lt;br&gt;SPA algorithm)]
+
+    i1---a1
+    i2---a1
+    Python&lt;===&gt;|pybind11|CPP
+
+    subgraph Python
+        a1--&gt;|set_observatory|a2
+        a1--&gt;|sun_position_at|a2
+    end
+
+    subgraph CPP
+        direction TB
+        b1--&gt;|calculate_sun_position_at|b2
+    end</code></pre>
+<h3 id="2-sequence-diagram">2. Sequence Diagram</h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant SunEarthAnalyzer
+    participant SPA_Analyzer
+    participant SPA
+    SunEarthAnalyzer -&gt;&gt;+ SPA_Analyzer: load algorithm
+    SPA_Analyzer --&gt;&gt;- SunEarthAnalyzer: calculator
+
+    SunEarthAnalyzer -&gt;&gt; SPA_Analyzer: set observatory
+
+    SunEarthAnalyzer -&gt;&gt;+ SPA_Analyzer: sun position at ?
+    % break when observatory not set
+    %     SPA_Analyzer --&gt;&gt; SunEarthAnalyzer: RuntimeError
+    % end
+    SPA_Analyzer --&gt;&gt;+ SPA: calculate sun position at ?
+    % break when validate_inputs fails
+    %     SPA--&gt;SPA_Analyzer: error code
+    % end
+    SPA --&gt;&gt; SPA: spa calcluate
+    SPA --&gt;&gt;- SPA_Analyzer: spa_data
+    SPA_Analyzer --&gt;&gt;- SunEarthAnalyzer: TopoCentricSunPositionResult</code></pre>
+<h3 id="3-class-diagram">3. Class Diagram</h3>
+<pre class="mermaid"><code>classDiagram
+    SunEarthAnalyzer "1" --&gt; "0..1" Analyzer: load algorithm
+    SunEarthAnalyzer "1" --&gt; "0..1" Observatory: set observatory
+    SunEarthAnalyzer --&gt; TopoCentricSunPositionResult: sun position at
+    Analyzer &lt;|-- SPA_Analyzer
+    Analyzer &lt;|-- SG2_Analyzer
+    TopoCentricSunPositionResult --&gt; OBS_TIME_T
+    class SunEarthAnalyzer {
+        +String algorithm
+        +Observatory observatory
+        -Analyzer _impl
+        +has_set_observatory()
+        +sun_position_at(obs_time: OBS_TIME_T)
+        -_load_algorithm()
+    }
+    class Analyzer {
+        -_observatory_set: bool = false
+        +virtual: get_observatory()
+        +virtual: set_observatory(kwargs)
+        +virtual: calc_sun_position_at(year,month,day,hour,minute,second)
+        +has_set_observatory()
+    }
+    &lt;&lt;interface&gt;&gt; Analyzer
+    class SPA_Analyzer {
+        -_observatory: map[string, double]
+        -_spa: spa_data
+
+    }
+    class SG2_Analyzer {
+        TODO
+    }
+    class Observatory {
+        +longitude: float
+        +latitude: float
+        +elevation: float
+        +timezone: float
+        +delta_ut1: float = 0
+        +delta_t: float = 0
+        +pressure: float = 0
+        +temperature: float = 0
+        +atmos_refract: float = 0
+    }
+
+    class OBS_TIME_T {
+        +year: int
+        +month: int
+        +day: int
+        +hour: int
+        +minute: int
+        +second: int
+    }
+    class TopoCentricSunPositionResult {
+        +zenith: float
+        +azimuth: float
+        +julian_day: float = None
+        +obs_time: OBS_TIME_T = None
+    }</code></pre>
+<h2 id="tests-by-pytest">Tests by Pytest</h2>
+<p>Currently, only Python code is tested by pytest. You are welcome to incorporate C++ tests.</p>
+<p>Testing via <a href="https://tox.readthedocs.io/">tox</a>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>tox -r -e dev -- -s -v
+</code></pre></div></p>
+<h2 id="documentation-preivew">Documentation Preivew</h2>
+<p>Docs is managed by <a href="https://squidfunk.github.io/mkdocs-material/">Material for Mkdocs</a>. Preview docs by:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>tox -r -e docs
+</code></pre></div></p>
 
               
             </article>
+            
           </div>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
             Back to top
           </a>
@@ -755,7 +849,8 @@
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../../user-guide/usage/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Usage" rel="prev">
@@ -836,10 +931,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.expand", "navigation.sections", "toc.integrate", "navigation.top"], "search": "../../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
+      <script src="../../assets/javascripts/bundle.0238f547.min.js"></script>
       
     
   </body>
