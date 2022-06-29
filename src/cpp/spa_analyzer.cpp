@@ -2,12 +2,12 @@
 
 #include "analyzer.h"
 
-const std::vector<std::string> Analyzer::OBS_FLD_NAMES = {
+const std::vector<std::string> Algorithm::OBS_FLD_NAMES = {
     "longitude", "latitude", "elevation",   "timezone",      "delta_ut1",
     "delta_t",   "pressure", "temperature", "atmos_refract",
 };
 
-void SPA_Analyzer::set_observatory(const py::kwargs &kwargs)
+void SPA_Calculator::set_observatory(const py::kwargs &kwargs)
 {
     for (auto &&fname : OBS_FLD_NAMES)
     {
@@ -36,7 +36,7 @@ void SPA_Analyzer::set_observatory(const py::kwargs &kwargs)
     _observatory_set = true;
 }
 
-py::dict SPA_Analyzer::get_observatory()
+py::dict SPA_Calculator::get_observatory()
 {
     py::dict d(py::arg("longitude") = _observatory["longitude"],
                py::arg("latitude") = _observatory["latitude"],
@@ -51,7 +51,7 @@ py::dict SPA_Analyzer::get_observatory()
     return d;
 }
 
-py::tuple SPA_Analyzer::calc_sun_position_at(int year, int month, int day,
+py::tuple SPA_Calculator::calc_sun_position_at(int year, int month, int day,
                                              int hour, int minute, int second)
 {
     if (!_observatory_set)

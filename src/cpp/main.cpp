@@ -21,10 +21,10 @@ PYBIND11_MODULE(_fseg, m)
     m.attr("__version__") = "dev";
 #endif
 
-    py::class_<SPA_Analyzer>(m, "SPA_Analyzer")
+    py::class_<SPA_Calculator>(m, "SPA_Calculator")
         .def(py::init<>())
-        .def("get_observatory", &SPA_Analyzer::get_observatory)
-        .def("set_observatory", &SPA_Analyzer::set_observatory)
-        .def("has_set_observatory", &SPA_Analyzer::has_set_observatory)
-        .def("calc_sun_position_at", &SPA_Analyzer::calc_sun_position_at);
+        .def("get_observatory", &SPA_Calculator::get_observatory)
+        .def("set_observatory", &SPA_Calculator::set_observatory)
+        .def("has_set_observatory", &SPA_Calculator::has_set_observatory)
+        .def("calc_sun_position_at", &SPA_Calculator::calc_sun_position_at);
 }

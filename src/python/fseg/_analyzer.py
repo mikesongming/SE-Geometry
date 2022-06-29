@@ -8,7 +8,7 @@ from ._data import (
     TopoCentricSunPositionResult,
     safely_from_dict,
 )
-from ._fseg import SPA_Analyzer
+from ._fseg import SPA_Calculator
 
 
 class SunEarthAnalyzer(object):
@@ -33,7 +33,7 @@ class SunEarthAnalyzer(object):
 
     def _load_algorithm(self):
         if self._algorithm.upper() == "SPA":
-            self._impl = SPA_Analyzer()
+            self._impl = SPA_Calculator()
         else:
             raise ValueError(f"Unknown algorithm: {self._algorithm}")
 

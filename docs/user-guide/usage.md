@@ -7,13 +7,13 @@ print(FSEG.__version__)
 
 ## sun position at
 
-1. Instantialize an [analyzer](https://mikesongming.github.io/SE-Geometry/reference/SunEarthAnalyzer/) bound to an _algorithm_, which defaults to _"SPA"_:
+1. Instantialize an [analyzer](https://mikesongming.github.io/SE-Geometry/reference/SunEarthAnalyzer/), and bound to an _algorithm_, for example _"SPA"_:
 
     ```py
     from FSEG import SunEarthAnalyzer
 
     sea = SunEarthAnalyzer()
-    sea = SunEarthAnalyzer(algorithm="SPA")
+    sea.algorithm="SPA"
     ```
 
 2. Set the observatory using _kwargs_ arguments:

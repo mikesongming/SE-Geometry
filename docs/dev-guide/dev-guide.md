@@ -46,8 +46,8 @@ flowchart LR
     i1((Observatory))
     i2((OBS_TIME_T))
     a1[SunEarthAnalyzer]
-    a2[interface of<br>SPA_Analyzer]
-    b1[SPA_Analyzer]
+    a2[py_interface of<br>SPA_Calculator]
+    b1[SPA_Calculator]
     b2[(C implementation of<br>SPA algorithm)]
 
     i1---a1
@@ -70,58 +70,59 @@ flowchart LR
 ``` mermaid
 sequenceDiagram
     participant SunEarthAnalyzer
-    participant SPA_Analyzer
+    participant SPA_Calculator
     participant SPA
-    SunEarthAnalyzer ->>+ SPA_Analyzer: load algorithm
-    SPA_Analyzer -->>- SunEarthAnalyzer: calculator
+    SunEarthAnalyzer ->>+ SPA_Calculator: load algorithm
+    SPA_Calculator -->>- SunEarthAnalyzer: calculator
 
-    SunEarthAnalyzer ->> SPA_Analyzer: set observatory
+    SunEarthAnalyzer ->> SPA_Calculator: set observatory
 
-    SunEarthAnalyzer ->>+ SPA_Analyzer: sun position at ?
+    SunEarthAnalyzer ->>+ SPA_Calculator: sun position at ?
     % break when observatory not set
-    %     SPA_Analyzer -->> SunEarthAnalyzer: RuntimeError
+    %     SPA_Calculator -->> SunEarthAnalyzer: RuntimeError
     % end
-    SPA_Analyzer -->>+ SPA: calculate sun position at ?
+    SPA_Calculator -->>+ SPA: calculate sun position at ?
     % break when validate_inputs fails
-    %     SPA-->SPA_Analyzer: error code
+    %     SPA-->SPA_Calculator: error code
     % end
     SPA -->> SPA: spa calcluate
-    SPA -->>- SPA_Analyzer: spa_data
-    SPA_Analyzer -->>- SunEarthAnalyzer: TopoCentricSunPositionResult
+    SPA -->>- SPA_Calculator: spa_data
+    SPA_Calculator -->>- SunEarthAnalyzer: TopoCentricSunPositionResult
 ```
 
 ### 3. Class Diagram
 
 ``` mermaid
 classDiagram
-    SunEarthAnalyzer "1" --> "0..1" Analyzer: load algorithm
+    SunEarthAnalyzer "1" --> "0..1" Algorithm: load algorithm
     SunEarthAnalyzer "1" --> "0..1" Observatory: set observatory
     SunEarthAnalyzer --> TopoCentricSunPositionResult: sun position at
-    Analyzer <|-- SPA_Analyzer
-    Analyzer <|-- SG2_Analyzer
+    Algorithm <|-- SPA_Calculator
+    Algorithm <|-- SG2_Calculator
+    Algorithm <|-- Other_Algorithm
     TopoCentricSunPositionResult --> OBS_TIME_T
     class SunEarthAnalyzer {
         +String algorithm
         +Observatory observatory
-        -Analyzer _impl
+        -Algorithm _impl
         +has_set_observatory()
         +sun_position_at(obs_time: OBS_TIME_T)
         -_load_algorithm()
     }
-    class Analyzer {
+    class Algorithm {
         -_observatory_set: bool = false
         +virtual: get_observatory()
         +virtual: set_observatory(kwargs)
         +virtual: calc_sun_position_at(year,month,day,hour,minute,second)
         +has_set_observatory()
     }
-    <<interface>> Analyzer
-    class SPA_Analyzer {
+    <<interface>> Algorithm
+    class SPA_Calculator {
         -_observatory: map[string, double]
         -_spa: spa_data
 
     }
-    class SG2_Analyzer {
+    class SG2_Calculator {
         TODO
     }
     class Observatory {

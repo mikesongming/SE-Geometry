@@ -10,7 +10,7 @@
 
 namespace py = pybind11;
 
-class Analyzer
+class Algorithm
 {
   public:
     virtual py::dict get_observatory() = 0;
@@ -28,7 +28,7 @@ class Analyzer
     bool _observatory_set = false;
 };
 
-class SPA_Analyzer : public Analyzer
+class SPA_Calculator : public Algorithm
 {
   public:
     py::dict get_observatory();
