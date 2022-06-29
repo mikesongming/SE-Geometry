@@ -1,6 +1,6 @@
 from dataclasses import asdict
 from datetime import datetime
-from typing import Any, Tuple
+from typing import Any, Optional, Tuple, Union
 
 from ._data import (
     OBS_TIME_T,
@@ -14,21 +14,42 @@ from ._fseg import SPA_Analyzer
 class SunEarthAnalyzer(object):
     """
     Interface class for sun-earth-analysis
-
-    Args:
-        algorithm (str): currently supports 'SPA'; Defaults to 'SPA'
     """
 
-    def __init__(self, algorithm: str = "SPA") -> None:
-        self._algorithm = algorithm
+    def __init__(self) -> None:
+        self._algorithm: Optional[str] = None
+        self._impl = None
         self._obs = Observatory(0.0, 0.0, 0.0, 0.0)
+
+    @property
+    def algorithm(self) -> Optional[str]:
+        return self._algorithm
+
+    @algorithm.setter
+    def algorithm(self, algorithm: str):
+        self._impl = None  # unset algorithm implementation
+        self._algorithm = algorithm
         self._load_algorithm()
 
     def _load_algorithm(self):
         if self._algorithm.upper() == "SPA":
             self._impl = SPA_Analyzer()
         else:
-            raise ValueError(f"Unknown algorithm {self._algorithm}")
+            raise ValueError(f"Unknown algorithm: {self._algorithm}")
+
+    @property
+    def observatory(self) -> Optional[Observatory]:
+        if self._impl and self.has_set_observatory():
+            return safely_from_dict(self._impl.get_observatory(), Observatory)
+        else:
+            return None
+
+    @observatory.setter
+    def observatory(self, value: Union[Observatory, dict]):
+        if self._impl and isinstance(value, Observatory):
+            self._impl.set_observatory(**asdict(value))
+        else:
+            pass
 
     def set_observatory(self, **kwargs) -> None:
         obs_keys = vars(self._obs)

@@ -12,7 +12,8 @@ with open(TEST_ROOT.joinpath("case_data.toml"), "rb") as f:
 
 @pytest.fixture(scope="module", params=["SPA"])
 def sun_earth_analyzer(request):
-    sea = SunEarthAnalyzer(algorithm=request.param)
+    sea = SunEarthAnalyzer()
+    sea.algorithm = request.param
     yield sea
 
 
