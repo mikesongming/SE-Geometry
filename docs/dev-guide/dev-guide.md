@@ -45,23 +45,30 @@ empowered by [Mermaid-Js](https://mermaid-js.github.io/mermaid/)
 flowchart LR
     i1((Observatory))
     i2((OBS_TIME_T))
-    a1[SunEarthAnalyzer]
-    a2[py_interface of<br>SPA_Calculator]
-    b1[SPA_Calculator]
-    b2[(C implementation of<br>SPA algorithm)]
+    c1[SunEarthAnalyzer]
+    a1[py::Algorithm]
+    a2[py::SPA_Calculator]
+    b1[Algorithm]
+    b2[SPA_Calculator]
+    d1[(C implementation of<br>SPA algorithm)]
 
-    i1---a1
-    i2---a1
-    Python<===>|pybind11|CPP
+    i1---c1
+    i2---c1
+
+    Py<===>|pybind11|CPP
 
     subgraph Python
-        a1-->|set_observatory|a2
-        a1-->|sun_position_at|a2
+        c1--->Py
+        subgraph Py
+            direction TB
+            a1-->a2
+        end
     end
 
     subgraph CPP
         direction TB
-        b1-->|calculate_sun_position_at|b2
+        b1-->b2
+        b2--->d1
     end
 ```
 

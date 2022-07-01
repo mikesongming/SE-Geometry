@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16.0)
 
 project(FSEG)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 cmake_policy(SET CMP0095 NEW)
 # cmake_policy(SET CMP0068 NEW)
@@ -31,7 +31,6 @@ else()
     LINK_LIBRARIES(m)
 endif()
 
-
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
     message(STATUS "Set up ccache ...")
@@ -39,15 +38,12 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache) # Less useful to do it for linking, see edit2
 endif(CCACHE_FOUND)
 
-# fetch pybind11 when building
+# Fetch third-party libraries
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Disable updating fetched content")
+include(HHinnatDate)
+include(GitPybind11)
 
-include(FetchContent)
-FetchContent_Declare(pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.9.2
-)
-FetchContent_MakeAvailable(pybind11)
 
 add_subdirectory(src)
 

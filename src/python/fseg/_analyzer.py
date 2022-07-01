@@ -9,6 +9,7 @@ from ._data import (
     safely_from_dict,
 )
 from ._fseg import SPA_Calculator
+from ._typing import ALGORITHM
 
 
 class SunEarthAnalyzer(object):
@@ -18,7 +19,7 @@ class SunEarthAnalyzer(object):
 
     def __init__(self) -> None:
         self._algorithm: Optional[str] = None
-        self._impl = None
+        self._impl: Optional[ALGORITHM] = None
         self._obs = Observatory(0.0, 0.0, 0.0, 0.0)
 
     @property
@@ -42,7 +43,7 @@ class SunEarthAnalyzer(object):
         if self._impl and self.has_set_observatory():
             return safely_from_dict(self._impl.get_observatory(), Observatory)
         else:
-            return None
+            raise RuntimeError("No algorithm loaded")
 
     @observatory.setter
     def observatory(self, value: Union[Observatory, dict]):
@@ -57,13 +58,14 @@ class SunEarthAnalyzer(object):
             if k in obs_keys:
                 setattr(self._obs, k, v)
 
-        self._impl.set_observatory(**asdict(self._obs))
+        if self._impl:
+            self._impl.set_observatory(**asdict(self._obs))
 
     def get_observatory(self) -> Observatory:
-        if self.has_set_observatory():
+        if self._impl and self.has_set_observatory():
             return safely_from_dict(self._impl.get_observatory(), Observatory)
         else:
-            return self._obs
+            raise RuntimeError("No algorithm loaded")
 
     def has_set_observatory(self) -> bool:
         """
@@ -87,7 +89,10 @@ class SunEarthAnalyzer(object):
             >>> sea.has_set_observatory()
             True
         """
-        return self._impl.has_set_observatory()
+        if self._impl:
+            return self._impl.has_set_observatory()
+        else:
+            return False
 
     def sun_position_at(
         self, dt: Any = None, DEBUG: bool = False, **kwargs
@@ -176,6 +181,7 @@ class SunEarthAnalyzer(object):
         """
         directly call c++ library, when performance is critical
         """
+        assert self._impl is not None
         zenith, azimuth, julian_day = self._impl.calc_sun_position_at(
             year, month, day, hour, minute, second
         )
