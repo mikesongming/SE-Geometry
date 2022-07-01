@@ -45,6 +45,7 @@ class CMakeBuild(build_ext):
         # from Python.
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
+            f"-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY={extdir}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
         ]
@@ -106,6 +107,9 @@ class CMakeBuild(build_ext):
         if sys.platform.startswith("darwin"):
             macosx_version_min = sysconfig.get_config_var("MACOSX_DEPLOYMENT_TARGET")
             if macosx_version_min:
+                # Anaconda currently set macosx_version_min='10.9'
+                # which is not compatible with C++17 on MacOSX
+                macosx_version_min = "10.12"
                 cmake_args += [
                     "-DCMAKE_OSX_DEPLOYMENT_TARGET={}".format(macosx_version_min)
                 ]
@@ -143,7 +147,7 @@ setup(
     zip_safe=False,
     python_requires=">=3.10",
     platforms=[
-        "cp310-macosx-10_9-x86_64",
+        "cp310-macosx-10_12-x86_64",
         "cp310-manylinux2014_x86_64",
         "cp310-win_amd64",
     ],

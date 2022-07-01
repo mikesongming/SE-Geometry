@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16.0)
 
 project(FSEG)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 cmake_policy(SET CMP0095 NEW)
 # cmake_policy(SET CMP0068 NEW)

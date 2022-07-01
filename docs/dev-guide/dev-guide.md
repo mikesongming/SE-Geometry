@@ -25,7 +25,7 @@ where {type} is one of:
 > - bug: for bug fixes
 > - maint: for maintenance and ci related
 > - dev: for breakthrough changes/milestone
-> - docs: for documentation changes
+> - doc: for documentation changes
 > - author: for contributor names
 
 and where the {source} part of the filename is:

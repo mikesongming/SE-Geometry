@@ -3,7 +3,7 @@ set(BUILD_SHARED_LIBS ON CACHE INTERNAL "")
 set(BUILD_TZ_LIB ON CACHE INTERNAL "")
 
 # switch off C++17 uncaught_exceptions
-add_compile_definitions(HAS_UNCAUGHT_EXCEPTIONS=FALSE)
+# add_compile_definitions(HAS_UNCAUGHT_EXCEPTIONS=FALSE)
 
 # fetch pybind11 when building
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Disable updating fetched content")
