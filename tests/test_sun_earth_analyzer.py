@@ -3,6 +3,7 @@ import pytest
 from fseg import SunEarthAnalyzer
 
 
+@pytest.mark.skip
 class TestSunEarthAnalyzer:
     @pytest.fixture(scope="function")
     def sea(self):

@@ -2,14 +2,14 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import Any, Optional, Tuple, Union
 
-from ._data import (
+from fseg._data import (
     OBS_TIME_T,
     Observatory,
     TopoCentricSunPositionResult,
     safely_from_dict,
 )
-from ._fseg import SPA_Calculator
-from ._typing import ALGORITHM
+from fseg._typing import ALGORITHM
+from fseg.impl import SPACalculator
 
 
 class SunEarthAnalyzer(object):
@@ -34,7 +34,7 @@ class SunEarthAnalyzer(object):
 
     def _load_algorithm(self):
         if self._algorithm.upper() == "SPA":
-            self._impl = SPA_Calculator()
+            self._impl = SPACalculator()
         else:
             raise ValueError(f"Unknown algorithm: {self._algorithm}")
 

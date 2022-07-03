@@ -141,7 +141,7 @@ class CMakeBuild(build_ext):
 setup(
     packages=find_packages(where="src/python"),
     package_dir={"fseg": "src/python/fseg"},
-    ext_package="fseg",
+    ext_package="fseg.impl",
     ext_modules=[CMakeExtension("_fseg")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,

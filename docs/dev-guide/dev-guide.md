@@ -47,17 +47,17 @@ flowchart LR
     i2((OBS_TIME_T))
     c1[SunEarthAnalyzer]
     a1[py::Algorithm]
-    a2[py::SPA_Calculator]
+    a2[py::SPACalculator]
     b1[Algorithm]
-    b2[SPA_Calculator]
+    b2[SPACalculator]
     d1[(C implementation of<br>SPA algorithm)]
 
     i1---c1
     i2---c1
 
-    Py<===>|pybind11|CPP
+    Py<===>|pybind11|Cpp
 
-    subgraph Python
+    subgraph Frontend
         c1--->Py
         subgraph Py
             direction TB
@@ -65,10 +65,13 @@ flowchart LR
         end
     end
 
-    subgraph CPP
-        direction TB
-        b1-->b2
-        b2--->d1
+    subgraph Backend
+        Cpp--->d1
+
+        subgraph Cpp
+            direction TB
+            b1-->b2
+        end
     end
 ```
 
@@ -77,24 +80,25 @@ flowchart LR
 ``` mermaid
 sequenceDiagram
     participant SunEarthAnalyzer
-    participant SPA_Calculator
+    participant SPACalculator
     participant SPA
-    SunEarthAnalyzer ->>+ SPA_Calculator: load algorithm
-    SPA_Calculator -->>- SunEarthAnalyzer: calculator
+    SunEarthAnalyzer ->>+ SPACalculator: load algorithm
+    SPACalculator -->>- SunEarthAnalyzer: calculator
 
-    SunEarthAnalyzer ->> SPA_Calculator: set observatory
+    SunEarthAnalyzer ->> SPACalculator: set observatory
+    SunEarthAnalyzer ->> SPACalculator: set local datetime
 
-    SunEarthAnalyzer ->>+ SPA_Calculator: sun position at ?
+    SunEarthAnalyzer ->>+ SPACalculator: sun position ?
     % break when observatory not set
-    %     SPA_Calculator -->> SunEarthAnalyzer: RuntimeError
+    %     SPACalculator -->> SunEarthAnalyzer: RuntimeError
     % end
-    SPA_Calculator -->>+ SPA: calculate sun position at ?
+    SPACalculator -->>+ SPA: calculate sun position at ?
     % break when validate_inputs fails
-    %     SPA-->SPA_Calculator: error code
+    %     SPA-->SPACalculator: error code
     % end
     SPA -->> SPA: spa calcluate
-    SPA -->>- SPA_Calculator: spa_data
-    SPA_Calculator -->>- SunEarthAnalyzer: TopoCentricSunPositionResult
+    SPA -->>- SPACalculator: spa_data
+    SPACalculator -->>- SunEarthAnalyzer: TopoCentricSunPositionResult
 ```
 
 ### 3. Class Diagram
@@ -104,28 +108,33 @@ classDiagram
     SunEarthAnalyzer "1" --> "0..1" Algorithm: load algorithm
     SunEarthAnalyzer "1" --> "0..1" Observatory: set observatory
     SunEarthAnalyzer --> TopoCentricSunPositionResult: sun position at
-    Algorithm <|-- SPA_Calculator
+    Algorithm <|-- SPACalculator
     Algorithm <|-- SG2_Calculator
     Algorithm <|-- Other_Algorithm
-    TopoCentricSunPositionResult --> OBS_TIME_T
     class SunEarthAnalyzer {
         +String algorithm
-        +Observatory observatory
         -Algorithm _impl
         +has_set_observatory()
-        +sun_position_at(obs_time: OBS_TIME_T)
+        +get_observatory()
+        +sun_position_at(local_datetime)
         -_load_algorithm()
     }
     class Algorithm {
         -_observatory_set: bool = false
-        +virtual: get_observatory()
-        +virtual: set_observatory(kwargs)
-        +virtual: calc_sun_position_at(year,month,day,hour,minute,second)
+        -_local_datetime_set: bool = false
+        -_observatory: map<string, double>
+        -_local_datetime: array<int>
+        + static OBS_FIELDS: vector<string>
         +has_set_observatory()
+        +get_observatory()
+        +set_observatory(...)
+        +has_set_local_datetime()
+        +get_local_datetime()
+        +set_local_datetime(...)
+        +virtual: calc_sun_position()
     }
     <<interface>> Algorithm
-    class SPA_Calculator {
-        -_observatory: map[string, double]
+    class SPACalculator {
         -_spa: spa_data
 
     }
@@ -156,7 +165,6 @@ classDiagram
         +zenith: float
         +azimuth: float
         +julian_day: float = None
-        +obs_time: OBS_TIME_T = None
     }
 ```
 

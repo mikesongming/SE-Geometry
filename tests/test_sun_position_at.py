@@ -3,6 +3,7 @@ from dataclasses import asdict
 import pytest
 
 
+@pytest.mark.skip
 class TestSEA_SunPositionAt:
     @pytest.fixture(scope="class", autouse=True)
     def set_observatory(self, sun_earth_analyzer, observatory):

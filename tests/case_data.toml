@@ -1,8 +1,10 @@
 [[case_data.sun_position_at]]
 id = 0
 
-[case_data.sun_position_at.input]
-time = 2003-10-17 12:30:30
+[case_data.sun_position_at.input.time]
+datetime = 2003-10-17 12:30:30
+string = "2003-10-17 12:30:30"
+array = [2003,10,17,12,30,30]
 
 [case_data.sun_position_at.input.observatory]
 longitude = -105.1786

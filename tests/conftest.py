@@ -32,24 +32,17 @@ def observatory(sun_position_case):
 
 @pytest.fixture(scope="module")
 def obs_time_datetime(sun_position_case):
-    return sun_position_case[1]
+    return sun_position_case[1]["datetime"]
 
 
 @pytest.fixture(scope="module")
-def obs_time_str(obs_time_datetime):
-    return obs_time_datetime.strftime("%Y-%m-%d %H:%M:%S")
+def obs_time_str(sun_position_case):
+    return sun_position_case[1]["string"]
 
 
 @pytest.fixture(scope="module")
-def obs_time_t(obs_time_datetime):
-    return (
-        obs_time_datetime.year,
-        obs_time_datetime.month,
-        obs_time_datetime.day,
-        obs_time_datetime.hour,
-        obs_time_datetime.minute,
-        obs_time_datetime.second,
-    )
+def obs_time_t(sun_position_case):
+    return sun_position_case[1]["array"]
 
 
 @pytest.fixture(scope="module")
