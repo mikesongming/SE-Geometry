@@ -1,12 +1,28 @@
 import pytest
 
-from fseg.impl import Algorithm
+from fseg.impl import Algorithm, SPACalculator
 
 
 class TestFSEGImplAlgorithm:
     @pytest.fixture(scope="function")
     def algorithm(self):
         return Algorithm()
+
+    @pytest.fixture(scope="function")
+    def spa_calculator(self):
+        return SPACalculator()
+
+    def test_name(self, algorithm):
+        with pytest.raises(RuntimeError) as e:
+            algorithm.name
+        assert "Tried to call pure virtual function" in str(e.value)
+
+    def test_spa_name(self, spa_calculator):
+        assert "SPA" == spa_calculator.name
+
+        with pytest.raises(AttributeError) as e:
+            spa_calculator.name = "Unknown"
+        assert "can't set attribute" in str(e.value)
 
     def test_static_attribute(self):
         assert [

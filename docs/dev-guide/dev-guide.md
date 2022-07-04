@@ -113,11 +113,12 @@ classDiagram
     Algorithm <|-- Other_Algorithm
     class SunEarthAnalyzer {
         +String algorithm
+        +Observatory observatory
         -Algorithm _impl
         +has_set_observatory()
-        +get_observatory()
         +sun_position_at(local_datetime)
         -_load_algorithm()
+        -_has_set_local_datetime()
     }
     class Algorithm {
         -_observatory_set: bool = false
@@ -131,6 +132,7 @@ classDiagram
         +has_set_local_datetime()
         +get_local_datetime()
         +set_local_datetime(...)
+        +virtual: name()
         +virtual: calc_sun_position()
     }
     <<interface>> Algorithm

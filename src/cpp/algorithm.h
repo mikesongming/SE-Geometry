@@ -40,6 +40,7 @@ class Algorithm
         return _local_datetime_set;
     };
 
+    virtual std::string name() = 0;
     virtual std::vector<double> calc_sun_position() = 0;
 
   protected:
@@ -57,9 +58,13 @@ class PyAlgorithm : public Algorithm
   public:
     using Algorithm::Algorithm;
 
+    std::string name() override
+    {
+        PYBIND11_OVERRIDE_PURE(std::string, Algorithm, name, );
+    }
+
     std::vector<double> calc_sun_position() override
     {
-        PYBIND11_OVERLOAD_PURE(std::vector<double>, Algorithm,
-                               calc_sun_position, );
+        PYBIND11_OVERRIDE_PURE(std::vector<double>, Algorithm, calc_sun_position, );
     }
 };

@@ -49,9 +49,11 @@ PYBIND11_MODULE(_fseg, m)
              py::overload_cast<const std::chrono::system_clock::time_point &>(
                  &Algorithm::set_local_datetime),
              "set observatory by datetime")
+        .def_property_readonly("name", &Algorithm::name)
         .def("calc_sun_position", &Algorithm::calc_sun_position);
 
     py::class_<SPACalculator, Algorithm, PySPACaculator>(m, "SPACalculator")
         .def(py::init<>())
+        .def_property_readonly("name", &SPACalculator::name)
         .def("calc_sun_position", &SPACalculator::calc_sun_position);
 }

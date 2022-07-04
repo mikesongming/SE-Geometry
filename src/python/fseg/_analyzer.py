@@ -8,8 +8,7 @@ from fseg._data import (
     TopoCentricSunPositionResult,
     safely_from_dict,
 )
-from fseg._typing import ALGORITHM
-from fseg.impl import SPACalculator
+from fseg.impl import Algorithm, SPACalculator
 
 
 class SunEarthAnalyzer(object):
@@ -19,7 +18,7 @@ class SunEarthAnalyzer(object):
 
     def __init__(self) -> None:
         self._algorithm: Optional[str] = None
-        self._impl: Optional[ALGORITHM] = None
+        self._impl: Optional[Algorithm] = None
         self._obs = Observatory(0.0, 0.0, 0.0, 0.0)
 
     @property
