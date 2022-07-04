@@ -112,13 +112,13 @@ classDiagram
     Algorithm <|-- SG2_Calculator
     Algorithm <|-- Other_Algorithm
     class SunEarthAnalyzer {
-        +String algorithm
-        +Observatory observatory
-        -Algorithm _impl
+        +algorithm: string
+        +observatory: Observatory
+        +registered: dict
+        -_impl: Algorithm
         +has_set_observatory()
         +sun_position_at(local_datetime)
         -_load_algorithm()
-        -_has_set_local_datetime()
     }
     class Algorithm {
         -_observatory_set: bool = false

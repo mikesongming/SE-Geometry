@@ -13,16 +13,14 @@ class TestFSEGImplAlgorithm:
         return SPACalculator()
 
     def test_name(self, algorithm):
-        with pytest.raises(RuntimeError) as e:
+        with pytest.raises(RuntimeError, match="Tried to call pure virtual function"):
             algorithm.name
-        assert "Tried to call pure virtual function" in str(e.value)
 
     def test_spa_name(self, spa_calculator):
         assert "SPA" == spa_calculator.name
 
-        with pytest.raises(AttributeError) as e:
+        with pytest.raises(AttributeError, match="can't set attribute"):
             spa_calculator.name = "Unknown"
-        assert "can't set attribute" in str(e.value)
 
     def test_static_attribute(self):
         assert [
@@ -38,10 +36,8 @@ class TestFSEGImplAlgorithm:
         ] == Algorithm.OBS_FIELDS
 
     def test_pure_virtual_calculate_sun_position(self, algorithm):
-        with pytest.raises(RuntimeError) as e:
+        with pytest.raises(RuntimeError, match="Tried to call pure virtual function"):
             algorithm.calc_sun_position()
-
-        assert "Tried to call pure virtual function" in str(e.value)
 
     def test_not_set_observatory_and_local_time(self, algorithm):
         assert not algorithm.has_set_observatory()

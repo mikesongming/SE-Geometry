@@ -1,24 +1,47 @@
+from dataclasses import asdict
+
 import pytest
 
 from fseg import SunEarthAnalyzer
+from fseg.impl import SPACalculator
 
 
-@pytest.mark.skip
 class TestSunEarthAnalyzer:
     @pytest.fixture(scope="function")
     def sea(self):
         sea = SunEarthAnalyzer()
         yield sea
 
-    @pytest.mark.xfail(reason="Algorithm is empty", raises=ValueError)
-    def test_fail_empty_algorithm(self, sea):
-        sea.algorithm = ""
+    @pytest.fixture(scope="function")
+    def load_spa(self, sea):
+        sea.algorithm = "SPA"
 
-    @pytest.mark.xfail(reason="Algorithm is invalid", raises=ValueError)
     def test_fail_wrong_algorithm(self, sea):
-        sea.algorithm = "NonExistent"
+        with pytest.raises(ValueError, match="Unknown algorithm"):
+            sea.algorithm = "NonExistent"
 
-    @pytest.mark.xfail(reason="No algorithm is set", raises=AttributeError)
     def test_fail_algorithm_not_set(self, sea):
-        assert sea._impl is None
-        sea.has_set_observatory()
+        assert sea.algorithm is None
+
+        with pytest.raises(AttributeError, match=r"object has no attribute '_impl'"):
+            sea._impl
+
+    def test_load_spa_calculator(self, sea, load_spa):
+        assert "SPA" == sea.algorithm
+        assert isinstance(sea._impl, SPACalculator)
+
+    def test_set_observatory(self, sea, load_spa, observatory):
+        # initial not set
+        assert not sea.has_set_observatory()
+        assert sea.observatory is None
+
+        # set with irrelevant key
+        with pytest.raises(TypeError, match="an unexpected keyword argument"):
+            sea.observatory = {"NonExistentKey": 1.0}
+        assert not sea.has_set_observatory()
+        assert sea.observatory is None
+
+        # set with valid keys
+        sea.observatory = observatory
+        assert sea.has_set_observatory()
+        assert observatory == asdict(sea.observatory)
