@@ -14,6 +14,11 @@ from fseg.impl import registered_algorithms
 class SunEarthAnalyzer(object):
     """
     Interface class for sun-earth-analysis
+
+    Attributes:
+        registered: map of algorithm name to its implementation class
+        algorithm: name of algorithm
+        observatory: relevant geological information of location
     """
 
     def __init__(self) -> None:
@@ -21,6 +26,12 @@ class SunEarthAnalyzer(object):
 
     @property
     def algorithm(self) -> Optional[str]:
+        """
+        unique name of algorithm
+
+        Returns:
+            Optional[str]: None if no algorithm loaded
+        """
         if hasattr(self, "_impl"):
             return self._impl.name
         else:
@@ -33,13 +44,20 @@ class SunEarthAnalyzer(object):
         self._load_algorithm(algorithm)
 
     def _load_algorithm(self, _algorithm: str):
-        if _algorithm in self.registered:
-            self._impl = self.registered[_algorithm]()
+        algo_cls = self.registered.get(_algorithm)
+        if algo_cls:
+            self._impl = algo_cls()
         else:
             raise ValueError(f"Unknown algorithm: {_algorithm}")
 
     @property
     def observatory(self) -> Optional[Observatory]:
+        """
+        wrap c++ map<string, double> with dataclass Observatory
+
+        Returns:
+            Optional[Observatory]: None if observatory not set
+        """
         if self.has_set_observatory():
             return Observatory(**self._impl.get_observatory())
         else:
@@ -61,18 +79,23 @@ class SunEarthAnalyzer(object):
 
         Examples:
             >>> sea = SunEarthAnalyzer()
+            >>> sea.algorithm = "SPA"
             >>> sea.has_set_observatory()
             False
             >>> sea.sun_position_at(2020,5,13,17,15,30)
             Traceback (most recent call last):
               ...
-            RuntimeError: Observatory has not set
+            RuntimeError: Observatory is unset
 
             >>> d = {'timezone': -7.0, 'longitude': -105.1786, 'latitude': 39.742476,
             ...      'elevation': 1830.14, 'foo': 100.0}
-            >>> sea.set_observatory(**d)
+            >>> sea.observatory = d
             >>> sea.has_set_observatory()
             True
+            >>> sea.observatory
+            Observatory(longitude=-105.1786, latitude=39.742476, elevation=1830.14,
+            timezone=-7.0, delta_ut1=0.0, delta_t=0.0, pressure=0.0, temperature=0.0,
+            atmos_refract=0.0)
         """
         return hasattr(self, "_impl") and self._impl.has_set_observatory()
 
@@ -81,32 +104,31 @@ class SunEarthAnalyzer(object):
         API for calculating sun position at a time
 
         Args:
-            dt (Any, optional): supports str and datetime format of observation
-                time. Defaults to None, when kwargs of (year, month, day, hour,
-                minute, second) must be given.
+            dt (DateTime_INPUT): supports str, datetime and array format of observation
+                time.
 
         Raises:
             ValueError: invalid inputs for observation time or
                 failed at validation stage of the implemented algorithm
 
         Returns:
-            (dt,sp) (Tuple[OBS_TIME_T, TopoCentricSunPositionResult]):
-                dt (year,month,day,hour,minute,second): parsed observation time
-                sp: topocentric solar position with julian day
+            sp (TopoCentricSunPositionResult): topocentric solar position with optional
+                Julian day
 
         Examples:
             >>> sea = SunEarthAnalyzer()
-            >>> sea.set_observatory(
+            >>> sea.algorithm = "SPA"
+            >>> sea.observatory = Observatory(
             ...     longitude=-105.1786, latitude=39.742476, elevation=1830.14,
             ...     timezone=-7.0, delta_ut1=0, delta_t=67,
             ...     pressure=820, temperature=11, atmos_refract=0.5667,
             ... )
-            >>> dt, sp = sea.sun_position_at("2003-10-17 12:30:30")
-            >>> dt
-            (2003, 10, 17, 12, 30, 30)
+            >>> sp = sea.sun_position_at("2003-10-17 12:30:30")
             >>> sp
             TopoCentricSunPositionResult(zenith=50.11162202402972,
             ... azimuth=194.34024051019162, julian_day=2452930.312847222)
+            >>> sea._impl.get_local_datetime()
+            [2003, 10, 17, 12, 30, 30]
         """
         self._impl.set_local_datetime(dt)
         return TopoCentricSunPositionResult(*self._impl.calc_sun_position())

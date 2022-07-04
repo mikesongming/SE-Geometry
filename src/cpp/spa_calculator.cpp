@@ -5,9 +5,9 @@
 std::vector<double> SPACalculator::calc_sun_position()
 {
     if (!has_set_observatory())
-        throw std::runtime_error("Observatory has not set");
+        throw std::runtime_error("Observatory is unset");
     if (!has_set_local_datetime())
-        throw std::runtime_error("Local datetime has not set");
+        throw std::runtime_error("Local datetime is unset");
 
     _spa.longitude = _observatory["longitude"];
     _spa.latitude = _observatory["latitude"];
