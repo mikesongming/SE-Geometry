@@ -9,13 +9,23 @@ std::vector<double> SPACalculator::calc_sun_position()
     if (!has_set_local_datetime())
         throw std::runtime_error("Local datetime has not set");
 
-    auto local_datetime = get_local_datetime();
-    _spa.year = local_datetime[0];
-    _spa.month = local_datetime[1];
-    _spa.day = local_datetime[2];
-    _spa.hour = local_datetime[3];
-    _spa.minute = local_datetime[4];
-    _spa.second = local_datetime[5];
+    _spa.longitude = _observatory["longitude"];
+    _spa.latitude = _observatory["latitude"];
+    _spa.elevation = _observatory["elevation"];
+    _spa.timezone = _observatory["timezone"];
+    _spa.delta_ut1 = _observatory["delta_ut1"];
+    _spa.delta_t = _observatory["delta_t"];
+    _spa.pressure = _observatory["pressure"];
+    _spa.temperature = _observatory["temperature"];
+    _spa.atmos_refract = _observatory["atmos_refract"];
+    _spa.function = SPA_ZA;
+
+    _spa.year = _local_datetime[0];
+    _spa.month = _local_datetime[1];
+    _spa.day = _local_datetime[2];
+    _spa.hour = _local_datetime[3];
+    _spa.minute = _local_datetime[4];
+    _spa.second = _local_datetime[5];
 
     int result = spa_calculate(&_spa);
 
