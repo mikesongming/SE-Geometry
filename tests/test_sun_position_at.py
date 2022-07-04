@@ -2,6 +2,8 @@ from dataclasses import asdict
 
 import pytest
 
+from fseg import SunEarthAnalyzer
+
 
 class TestSEA_SunPositionAt:
     @pytest.fixture(scope="class", autouse=True)
@@ -9,20 +11,23 @@ class TestSEA_SunPositionAt:
         sun_earth_analyzer.observatory = observatory
 
     def test_str_input(
-        self, sun_earth_analyzer, obs_time_str, obs_time_t, sun_position
+        self, sun_earth_analyzer, local_datetime_str, local_datetime, sun_position
     ):
-        sp_result = sun_earth_analyzer.sun_position_at(obs_time_str, DEBUG=True)
-        assert obs_time_t == sun_earth_analyzer._impl.get_local_datetime()
+        sp_result = sun_earth_analyzer.sun_position_at(local_datetime_str)
+        assert local_datetime == sun_earth_analyzer._impl.get_local_datetime()
         assert asdict(sp_result) == pytest.approx(sun_position)
 
     def test_datetime_input(
-        self, sun_earth_analyzer, obs_time_datetime, obs_time_t, sun_position
+        self, sun_earth_analyzer, local_datetime_datetime, local_datetime, sun_position
     ):
-        sp_result = sun_earth_analyzer.sun_position_at(obs_time_datetime, DEBUG=True)
-        assert obs_time_t == sun_earth_analyzer._impl.get_local_datetime()
+        sp_result = sun_earth_analyzer.sun_position_at(local_datetime_datetime)
+        assert local_datetime == sun_earth_analyzer._impl.get_local_datetime()
         assert asdict(sp_result) == pytest.approx(sun_position)
 
-    def test_ints_input(self, sun_earth_analyzer, obs_time_t, sun_position):
-        sp_result = sun_earth_analyzer.sun_position_at(obs_time_t, DEBUG=True)
-        assert obs_time_t == sun_earth_analyzer._impl.get_local_datetime()
+    def test_ints_input(self, sun_earth_analyzer, local_datetime, sun_position):
+        sp_result = sun_earth_analyzer.sun_position_at(local_datetime)
+        SunEarthAnalyzer.print_sun_position_details(
+            sun_earth_analyzer.observatory, local_datetime, sp_result
+        )
+        assert local_datetime == sun_earth_analyzer._impl.get_local_datetime()
         assert asdict(sp_result) == pytest.approx(sun_position)

@@ -92,17 +92,19 @@ class TestFSEGImplAlgorithm:
         assert algorithm.has_set_observatory()
         assert observatory == algorithm.get_observatory()
 
-    def test_set_local_datetime_o1(self, algorithm, obs_time_t):
-        algorithm.set_local_datetime(obs_time_t)
+    def test_set_local_datetime_o1(self, algorithm, local_datetime):
+        algorithm.set_local_datetime(local_datetime)
         assert algorithm.has_set_local_datetime()
-        assert obs_time_t == algorithm.get_local_datetime()
+        assert local_datetime == algorithm.get_local_datetime()
 
-    def test_set_local_datetime_o2(self, algorithm, obs_time_str, obs_time_t):
-        algorithm.set_local_datetime(obs_time_str)
+    def test_set_local_datetime_o2(self, algorithm, local_datetime_str, local_datetime):
+        algorithm.set_local_datetime(local_datetime_str)
         assert algorithm.has_set_local_datetime()
-        assert obs_time_t == algorithm.get_local_datetime()
+        assert local_datetime == algorithm.get_local_datetime()
 
-    def test_set_local_datetime_o3(self, algorithm, obs_time_datetime, obs_time_t):
-        algorithm.set_local_datetime(obs_time_datetime)
+    def test_set_local_datetime_o3(
+        self, algorithm, local_datetime_datetime, local_datetime
+    ):
+        algorithm.set_local_datetime(local_datetime_datetime)
         assert algorithm.has_set_local_datetime()
-        assert obs_time_t == algorithm.get_local_datetime()
+        assert local_datetime == algorithm.get_local_datetime()

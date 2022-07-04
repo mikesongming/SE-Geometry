@@ -1,8 +1,8 @@
-from dataclasses import asdict
+from dataclasses import asdict, astuple
 
 import pytest
 
-from fseg import SunEarthAnalyzer
+from fseg import Observatory, SunEarthAnalyzer
 from fseg.impl import SPACalculator
 
 
@@ -45,3 +45,9 @@ class TestSunEarthAnalyzer:
         sea.observatory = observatory
         assert sea.has_set_observatory()
         assert observatory == asdict(sea.observatory)
+
+        # change observatory
+        toy_observatory = Observatory(*[1, 2, 3, 4])
+        sea.observatory = toy_observatory
+        assert [1, 2, 3, 4] == pytest.approx(astuple(sea.observatory)[:4])
+        assert set([0]) == set(astuple(sea.observatory)[4:])

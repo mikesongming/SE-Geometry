@@ -1,0 +1,1 @@
+simplify python frontend api by refactoring c++ backend with pybind11-empowered virtual function overriding and methods overloading

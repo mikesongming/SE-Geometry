@@ -44,7 +44,7 @@ empowered by [Mermaid-Js](https://mermaid-js.github.io/mermaid/)
 ``` mermaid
 flowchart LR
     i1((Observatory))
-    i2((OBS_TIME_T))
+    i2((Local Datatime))
     c1[SunEarthAnalyzer]
     a1[py::Algorithm]
     a2[py::SPACalculator]
@@ -153,15 +153,6 @@ classDiagram
         +pressure: float = 0
         +temperature: float = 0
         +atmos_refract: float = 0
-    }
-
-    class OBS_TIME_T {
-        +year: int
-        +month: int
-        +day: int
-        +hour: int
-        +minute: int
-        +second: int
     }
     class TopoCentricSunPositionResult {
         +zenith: float
