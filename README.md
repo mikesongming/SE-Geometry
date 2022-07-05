@@ -32,7 +32,7 @@ Please visit [Homepage](https://mikesongming.github.io/SE-Geometry/index.html) f
 
 FSEG can be installed via PyPi by:
 ```sh
-pip install FSEG
+pip install fseg
 ```
 
 To build by source, call a [PEP517](https://peps.python.org/pep-0517) compliant build-system by:

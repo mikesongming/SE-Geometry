@@ -4,7 +4,7 @@
 
 1. Install [Anaconda](https://www.anaconda.com/) on System
 2. Install [CMake](https://cmake.org) on System
-3. Install C++/C Compiler on System, w.r.t. [supported platforms](https://mikesongming.github.io/SE-Geometry/#supported-platforms)
+3. Install C++/C Compiler on System, w.r.t. [supported platforms](../index.md#supported-platforms)
 4. Checkout issue related branch from [Github](https://github.com/mikesongming/SE-Geometry)
 5. Prepare Python environment, either by
 ```
@@ -161,6 +161,25 @@ classDiagram
     }
 ```
 
+## How to add algorithm
+
+1. Add an sub-class of `Algorithm`, implementing two methods: `name` and `calc_sun_position`
+
+2. Add a [pybind11 trampoline class](https://pybind11.readthedocs.io/en/stable/advanced/classes.html#overriding-virtual-functions-in-python) for the new algorithm class for automatic downcasting
+
+3. Bind the algorithm to python in `src/cpp/main.cpp`
+```cpp
+    py::class_<SPACalculator, Algorithm, PySPACaculator>(m, "SPACalculator")
+        .def(py::init<>())
+        .def_property_readonly("name", &SPACalculator::name)
+        .def("calc_sun_position", &SPACalculator::calc_sun_position);
+```
+4. Register the algorithm in `src/python/fseg/impl/__init__.py`
+```py
+registered_algorithms = {
+    "SPA": SPACalculator,
+}
+```
 ## Tests by Pytest
 
 Currently, only Python code is tested by pytest. You are welcome to incorporate C++ tests.

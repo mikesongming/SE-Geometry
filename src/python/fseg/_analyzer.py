@@ -82,13 +82,13 @@ class SunEarthAnalyzer(object):
             >>> sea.algorithm = "SPA"
             >>> sea.has_set_observatory()
             False
-            >>> sea.sun_position_at(2020,5,13,17,15,30)
+            >>> sea.sun_position_at([2020, 5, 13, 17, 15, 30])
             Traceback (most recent call last):
               ...
             RuntimeError: Observatory is unset
 
             >>> d = {'timezone': -7.0, 'longitude': -105.1786, 'latitude': 39.742476,
-            ...      'elevation': 1830.14, 'foo': 100.0}
+            ...      'elevation': 1830.14}
             >>> sea.observatory = d
             >>> sea.has_set_observatory()
             True
