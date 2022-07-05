@@ -5,9 +5,6 @@ set(BUILD_TZ_LIB ON CACHE INTERNAL "")
 # switch off C++17 uncaught_exceptions
 # add_compile_definitions(HAS_UNCAUGHT_EXCEPTIONS=FALSE)
 
-# fetch pybind11 when building
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "Disable updating fetched content")
-
 include(FetchContent)
 FetchContent_Declare(howard_hinnant_date
     GIT_REPOSITORY https://github.com/HowardHinnant/date.git

@@ -59,6 +59,12 @@ void Algorithm::set_local_datetime(const std::string &dt_str)
     std::chrono::system_clock::time_point tp;
     in >> date::parse("%Y-%m-%d %H:%M:%S", tp);
 
+    if (in.fail())
+    {
+        std::string err_msg = "Mismatched datetime string: '" + dt_str + "'";
+        throw std::invalid_argument(err_msg);
+    }
+
     auto dp = date::floor<date::days>(tp);
     auto ymd = date::year_month_day{dp};
     auto time = date::make_time(

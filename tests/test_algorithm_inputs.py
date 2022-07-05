@@ -102,6 +102,11 @@ class TestFSEGImplAlgorithm:
         assert algorithm.has_set_local_datetime()
         assert local_datetime == algorithm.get_local_datetime()
 
+    def test_set_local_datetime_o2_fail(self, algorithm):
+        local_date_time_str = "2019-13-05 12:30:90"
+        with pytest.raises(ValueError, match="Mismatched datetime string"):
+            algorithm.set_local_datetime(local_date_time_str)
+
     def test_set_local_datetime_o3(
         self, algorithm, local_datetime_datetime, local_datetime
     ):
