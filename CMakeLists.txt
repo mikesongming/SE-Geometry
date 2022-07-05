@@ -21,7 +21,12 @@ if (MSVC)
     # (according to https://cmake.org/cmake/help/latest/variable/MSVC_VERSION.html#variable:MSVC_VERSION)
     if (MSVC_VERSION GREATER_EQUAL 1925)
         cmake_print_variables(MSVC_VERSION)
-        add_compile_options(/Zc:preprocessor)
+        cmake_print_variables(CMAKE_VERSION)
+        cmake_print_variables(CMAKE_SYSTEM_VERSION)
+
+        # add_compile_options(/Zc:preprocessor)
+
+        # add_compile_options(/wd5105)  ## which failed on Github Actions Runner windows-2019
     else()
         message(FATAL_ERROR "MSVC compiler before VS2019 Update5 are not supported")
     endif()
