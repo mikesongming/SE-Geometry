@@ -1,11 +1,71 @@
 import os
+import platform
 import re
 import subprocess
 import sys
 import sysconfig
+import tarfile
+import tempfile
+from pathlib import Path
 
+import wget
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
+
+
+def download_and_extract_tzdata2022a(tempdir: Path):
+    iana_url = "https://data.iana.org/time-zones/releases/tzdata2022a.tar.gz"
+    local_iana_file = tempdir.joinpath(Path(iana_url).name)
+
+    wget.download(iana_url, str(local_iana_file))
+    local_tzdata_dir = tempdir.joinpath(Path(Path(local_iana_file.name).stem).stem)
+
+    with tarfile.open(local_iana_file, "r:gz") as tar:
+        tar.extractall(local_tzdata_dir)
+
+    return local_tzdata_dir
+
+
+def download_windows_mapping_file(tempdir: Path):
+    url = "/".join(
+        [
+            "https://raw.githubusercontent.com/unicode-org/cldr",
+            "main/common/supplemental/windowsZones.xml",
+        ]
+    )
+    local_file = tempdir.joinpath(Path(url).name)
+
+    wget.download(url, str(local_file))
+    return local_file
+
+
+def pack_hhdate_tzdata(tzdata2022a_dir: Path, mapping_file: Path):
+    tzdata_dir = Path().home().joinpath("Downloads", "tzdata")
+    if not tzdata_dir.exists():
+        tzdata2022a_dir.rename(tzdata_dir)
+        mapping_file.rename(tzdata_dir.joinpath(mapping_file.name))
+        return tzdata_dir
+    else:
+        return None
+
+
+def print_tzdata(tzdata_dir: Path):
+    for child in tzdata_dir.iterdir():
+        print(child)
+        if child.is_dir():
+            for _c in child.iterdir():
+                print(_c)
+
+
+def download_tzdata():
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempDir:
+        tempDir = Path(tempDir)
+        tzdata2022a_dir = download_and_extract_tzdata2022a(tempDir)
+        mapping_file = download_windows_mapping_file(tempDir)
+        tzdata_dir = pack_hhdate_tzdata(tzdata2022a_dir, mapping_file)
+        if tzdata_dir:
+            print_tzdata(tzdata_dir)
+
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
@@ -104,7 +164,7 @@ class CMakeBuild(build_ext):
             assert cfg == "Release", "MSVC only support Release build-type"
             sysconfig.get_config_vars()["Py_DEBUG"] = False
 
-        if sys.platform.startswith("darwin"):
+        if platform.platform().startswith("macOS"):
             macosx_version_min = sysconfig.get_config_var("MACOSX_DEPLOYMENT_TARGET")
             if macosx_version_min:
                 # Anaconda currently set macosx_version_min='10.9'
@@ -118,6 +178,14 @@ class CMakeBuild(build_ext):
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
             if archs:
                 cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
+        elif platform.platform().startswith("Windows"):
+            try:
+                print("Download tzdata for Windows")
+                download_tzdata()
+            except Exception as e:
+                print("Failed to download tzdata for Windows", file=sys.stderr)
+                print(type(e), "::", e, file=sys.stderr)
+                exit(1)
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
