@@ -1,9 +1,10 @@
+import platform
+
 import pytest
 
 from fseg.impl import Algorithm, SPACalculator
 
 
-@pytest.mark.skip(reason="Windows Stack Overflow")
 class TestFSEGImplAlgorithm:
     @pytest.fixture(scope="function")
     def algorithm(self):
@@ -13,6 +14,10 @@ class TestFSEGImplAlgorithm:
     def spa_calculator(self):
         return SPACalculator()
 
+    @pytest.mark.skipif(
+        condition=platform.platform().startswith("Windows"),
+        reason="Windows fatal exception: stack overflow",
+    )
     def test_name(self, algorithm):
         with pytest.raises(RuntimeError, match="Tried to call pure virtual function"):
             algorithm.name

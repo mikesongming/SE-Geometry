@@ -6,7 +6,6 @@ from fseg import Observatory, SunEarthAnalyzer
 from fseg.impl import SPACalculator
 
 
-@pytest.mark.skip(reason="Windows Stack Overflow")
 class TestSunEarthAnalyzer:
     @pytest.fixture(scope="function")
     def sea(self):

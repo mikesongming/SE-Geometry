@@ -39,8 +39,7 @@ def download_windows_mapping_file(tempdir: Path):
     return local_file
 
 
-def pack_hhdate_tzdata(tzdata2022a_dir: Path, mapping_file: Path):
-    tzdata_dir = Path().home().joinpath("Downloads", "tzdata")
+def pack_hhdate_tzdata(tzdata_dir: Path, tzdata2022a_dir: Path, mapping_file: Path):
     if not tzdata_dir.exists():
         tzdata2022a_dir.rename(tzdata_dir)
         mapping_file.rename(tzdata_dir.joinpath(mapping_file.name))
@@ -58,13 +57,18 @@ def print_tzdata(tzdata_dir: Path):
 
 
 def download_tzdata():
-    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempDir:
-        tempDir = Path(tempDir)
-        tzdata2022a_dir = download_and_extract_tzdata2022a(tempDir)
-        mapping_file = download_windows_mapping_file(tempDir)
-        tzdata_dir = pack_hhdate_tzdata(tzdata2022a_dir, mapping_file)
-        if tzdata_dir:
-            print_tzdata(tzdata_dir)
+    tzdata_dir = Path().home().joinpath("Downloads", "tzdata")
+    if tzdata_dir.exists():
+        print(f"{tzdata_dir} already exists, skip download.")
+    else:
+        print("Downloading tzdata for Windows")
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempDir:
+            tempDir = Path(tempDir)
+            tzdata2022a_dir = download_and_extract_tzdata2022a(tempDir)
+            mapping_file = download_windows_mapping_file(tempDir)
+            pack_hhdate_tzdata(tzdata_dir, tzdata2022a_dir, mapping_file)
+            if tzdata_dir:
+                print_tzdata(tzdata_dir)
 
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
@@ -180,7 +184,6 @@ class CMakeBuild(build_ext):
                 cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
         elif platform.platform().startswith("Windows"):
             try:
-                print("Download tzdata for Windows")
                 download_tzdata()
             except Exception as e:
                 print("Failed to download tzdata for Windows", file=sys.stderr)

@@ -14,8 +14,12 @@ or
 ```
 pip install tox && tox -e dev
 ```
-6. Browse and edit source code as your wish, [VSCode](https://code.visualstudio.com/) recommened as the IDE
-7. Broadcast your work using [towncrier](https://towncrier.readthedocs.io/en/latest/) by:
+6. Add `pre-commit` git hooks
+```
+python -m pre_commit install
+```
+7. Browse and edit source code as your wish, [VSCode](https://code.visualstudio.com/) recommened as the IDE
+8. Broadcast your work using [towncrier](https://towncrier.readthedocs.io/en/latest/) by:
 ```
 towncrier create {source}.{type} --edit
 ```
