@@ -6,6 +6,9 @@ on:
     paths:
       - docs
       - overrides
+  pull_request:
+    types:
+      - closed
   workflow_dispatch:
 
 
@@ -16,6 +19,10 @@ jobs:
   deploy:
     needs: whoami
     runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged)
     steps:
       - uses: actions/checkout@v3
         with:

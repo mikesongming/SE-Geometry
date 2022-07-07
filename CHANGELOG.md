@@ -2,6 +2,29 @@
 
 <!-- towncrier release notes start -->
 
+## **v0.8.0** (2022-07-07)
+
+### :bulb: API Changes
+
+- [#24](https://github.com/mikesongming/SE-Geometry/issues/24) simplify python
+  frontend api by refactoring c++ backend with pybind11-empowered virtual
+  function overriding and methods overloading
+
+
+### :memo: Documentation Improvements
+
+- [#24](https://github.com/mikesongming/SE-Geometry/issues/24) update flow
+  graph in dev-guid.md and docstring in _analyzer.py
+
+
+### :hammer_and_wrench: Maintenance
+
+- [PR\#26](https://github.com/mikesongming/SE-Geometry/pull/26) Introduce cmake
+  module to fetch library pybind11 and date-tz; Modify setup.py to support
+  c++17 on MacOSX >= 10.12;
+  and Build windows version on Windows-2022 with manually downloaded tzdata
+
+
 ## **v0.7.6** (2022-06-28)
 
 ### :bug: Bug Fixes

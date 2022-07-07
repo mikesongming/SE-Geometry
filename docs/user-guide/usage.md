@@ -5,6 +5,22 @@ import fseg
 print(fseg.__version__)
 ```
 
+!!! note
+
+    Since there is no system time-zone data on **Windows**,
+    it is necessary to download [IANA](https://www.iana.org/time-zones)
+    tzdata for the library date-tz.
+
+    ```bash
+    mkdir $HOME/tzdata
+    cd $HOME/tzdata
+    curl "https://data.iana.org/time-zones/releases/tzdata2022a.tar.gz" | tar xvz
+    curl "https://raw.githubusercontent.com/unicode-org/cldr/main/common/supplemental/windowsZones.xml"
+    ```
+
+    If `curl` failed with `connection refused`, manually download the `windowsZones.xml` file in browser.
+
+
 ## sun position at
 
 1. Instantialize an `analyzer`, and bound to an _algorithm_, for example _"SPA"_:

@@ -21,4 +21,4 @@ which comsists of a simplistic _python_ frontend and an extensible _C++_ backend
 
 - MacOSX-10.12-x86_64
 - Ubuntu-20.04-manylinux_x86_64
-- Windows-2019-win_amd64
+- Windows-2022-win_amd64
