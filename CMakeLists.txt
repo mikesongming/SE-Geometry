@@ -19,12 +19,12 @@ if (MSVC)
     # (according to https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros)
     # CMake's ${MSVC_VERSION} is equivalent to _MSC_VER
     # (according to https://cmake.org/cmake/help/latest/variable/MSVC_VERSION.html#variable:MSVC_VERSION)
-    if (MSVC_VERSION GREATER_EQUAL 1925)
+    if ((MSVC_VERSION GREATER_EQUAL 1925) AND (MSVC_VERSION LESS_EQUAL 1930))
         cmake_print_variables(MSVC_VERSION)
         cmake_print_variables(CMAKE_VERSION)
         cmake_print_variables(CMAKE_SYSTEM_VERSION)
 
-        # add_compile_options(/Zc:preprocessor)
+        # add_compile_options(/Zc:preprocessor)     # unnecessary for windows-2022 MSVC 14.32
 
         # add_compile_options(/wd5105)  ## which failed on Github Actions Runner windows-2019
     else()

@@ -20,6 +20,7 @@ print(fseg.__version__)
 
     If `curl` failed with `connection refused`, manually download the `windowsZones.xml` file in browser.
 
+    <font color="red">Windows version was forgone at v0.8.0 </font>
 
 ## sun position at
 
