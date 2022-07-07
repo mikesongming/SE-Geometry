@@ -6,7 +6,7 @@ either from PYPI or from source. Later, installation with Anaconda is  more reco
 ## with PIP
 
 ```sh
-pip install FSEG
+pip install fseg
 ```
 
 ## with GIT

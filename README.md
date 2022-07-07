@@ -32,7 +32,7 @@ Please visit [Homepage](https://mikesongming.github.io/SE-Geometry/index.html) f
 
 FSEG can be installed via PyPi by:
 ```sh
-pip install FSEG
+pip install fseg
 ```
 
 To build by source, call a [PEP517](https://peps.python.org/pep-0517) compliant build-system by:
@@ -58,12 +58,3 @@ To aggregate expertise and efforts from both uncommercial and commercial entitie
 本项目版权采用[LGPLv2.1](LICENSE)开源协议，意味着基于本项目的库文件可以进行任意开源或者闭源软件的开发，但是对本项目的**任意修改**需要采用同样的协议开源。
 
 如有疑问，请联系 gnosoir@hotmail.com 。
-
-<!-- Sun-Earth-Analyzer (SEA) is a Soloar Position algorithm runtime package with Python.
-
-It provides:
-- SPA
-
-
-Tested Platforms:
-- MacOSX-10.9-x86_64 -->

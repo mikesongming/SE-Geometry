@@ -1,32 +1,29 @@
-from datetime import datetime
+from pathlib import Path
 
 import pytest
+import tomli
 
 from fseg import SunEarthAnalyzer
+from fseg.impl import Algorithm
 
-from .case_data import sun_position_data
+TEST_ROOT = Path(__file__).parent
+with open(TEST_ROOT.joinpath("case_data.toml"), "rb") as f:
+    case_data = tomli.load(f)["case_data"]
 
 
 @pytest.fixture(scope="module", params=["SPA"])
 def sun_earth_analyzer(request):
-    sea = SunEarthAnalyzer(algorithm=request.param)
+    sea = SunEarthAnalyzer()
+    sea.algorithm = request.param
     yield sea
 
 
-@pytest.fixture(scope="module", params=range(len(sun_position_data)))
+@pytest.fixture(scope="module", params=case_data["sun_position_at"])
 def sun_position_case(request):
-    case_id = request.param
-    case_data = sun_position_data[case_id]
-    case_input = case_data["input"]
-    case_output = case_data["output"]
-    obs = case_input["observatory"]
-    obs_time_t = tuple(
-        case_input["time"].get(k)
-        for k in ["year", "month", "day", "hour", "minute", "second"]
-    )
-    sp_result = case_output
+    input = request.param["input"]
+    output = request.param["output"]
 
-    yield (obs, obs_time_t, sp_result)
+    yield (input["observatory"], input["time"], output)
 
 
 @pytest.fixture(scope="module")
@@ -35,20 +32,29 @@ def observatory(sun_position_case):
 
 
 @pytest.fixture(scope="module")
-def obs_time_str(obs_time_datetime):
-    return obs_time_datetime.strftime("%Y-%m-%d %H:%M:%S")
+def local_datetime_datetime(sun_position_case):
+    return sun_position_case[1]["datetime"]
 
 
 @pytest.fixture(scope="module")
-def obs_time_datetime(obs_time_t):
-    return datetime(*obs_time_t)
+def local_datetime_str(sun_position_case):
+    return sun_position_case[1]["string"]
 
 
 @pytest.fixture(scope="module")
-def obs_time_t(sun_position_case):
-    return sun_position_case[1]
+def local_datetime(sun_position_case):
+    return sun_position_case[1]["array"]
 
 
 @pytest.fixture(scope="module")
 def sun_position(sun_position_case):
     return sun_position_case[2]
+
+
+class Foo(Algorithm):
+    @property
+    def name(self) -> str:
+        return "Foo"
+
+    def calc_sun_position(self):
+        return [0.0, 0.0]

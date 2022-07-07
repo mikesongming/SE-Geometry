@@ -5,6 +5,7 @@ requires = [
   "build >= 0.7",
   "versioningit >= 2.0",
   "ninja >= 1.10",
+  "wget >= 3.2",
 ]
 build-backend = "setuptools.build_meta"
 

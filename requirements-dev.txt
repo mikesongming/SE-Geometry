@@ -1,6 +1,7 @@
 tox>=3.25.0
 build>=0.7.0
 ninja>=1.10
+wget>=3.2
 versioningit>=2
 towncrier==21.9.0
 

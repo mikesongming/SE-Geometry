@@ -1,0 +1,23 @@
+[[case_data.sun_position_at]]
+id = 0
+
+[case_data.sun_position_at.input.time]
+datetime = 2003-10-17 12:30:30
+string = "2003-10-17 12:30:30"
+array = [2003,10,17,12,30,30]
+
+[case_data.sun_position_at.input.observatory]
+longitude = -105.1786
+latitude = 39.742476
+elevation = 1830.14
+timezone = -7.0
+delta_ut1 = 0
+delta_t = 67
+pressure = 820
+temperature = 11
+atmos_refract = 0.5667
+
+[case_data.sun_position_at.output]
+julian_day = 2452930.312847
+zenith = 50.111622
+azimuth = 194.340241

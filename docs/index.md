@@ -6,7 +6,7 @@
 A library on sun position and sunlight analysis from the observer's viewpoint,
 which comsists of a simplistic _python_ frontend and an extensible _C++_ backend.
 
-[Get Started](https://mikesongming.github.io/SE-Geometry/user-guide/install/){ .md-button .md-button--primary }
+[Get Started](./user-guide/install.md){ .md-button .md-button--primary }
 
 
 ## Features & Algorithms
@@ -19,6 +19,6 @@ which comsists of a simplistic _python_ frontend and an extensible _C++_ backend
 
 ## Supported Platforms
 
-- MacOSX-10.9-x86_64
+- MacOSX-10.12-x86_64
 - Ubuntu-20.04-manylinux_x86_64
 - Windows-2019-win_amd64

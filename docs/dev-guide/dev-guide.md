@@ -4,7 +4,7 @@
 
 1. Install [Anaconda](https://www.anaconda.com/) on System
 2. Install [CMake](https://cmake.org) on System
-3. Install C++/C Compiler on System, w.r.t. [supported platforms](https://mikesongming.github.io/SE-Geometry/#supported-platforms)
+3. Install C++/C Compiler on System, w.r.t. [supported platforms](../index.md#supported-platforms)
 4. Checkout issue related branch from [Github](https://github.com/mikesongming/SE-Geometry)
 5. Prepare Python environment, either by
 ```
@@ -14,8 +14,12 @@ or
 ```
 pip install tox && tox -e dev
 ```
-6. Browse and edit source code as your wish, [VSCode](https://code.visualstudio.com/) recommened as the IDE
-7. Broadcast your work using [towncrier](https://towncrier.readthedocs.io/en/latest/) by:
+6. Add `pre-commit` git hooks
+```
+python -m pre_commit install
+```
+7. Browse and edit source code as your wish, [VSCode](https://code.visualstudio.com/) recommened as the IDE
+8. Broadcast your work using [towncrier](https://towncrier.readthedocs.io/en/latest/) by:
 ```
 towncrier create {source}.{type} --edit
 ```
@@ -25,7 +29,7 @@ where {type} is one of:
 > - bug: for bug fixes
 > - maint: for maintenance and ci related
 > - dev: for breakthrough changes/milestone
-> - docs: for documentation changes
+> - doc: for documentation changes
 > - author: for contributor names
 
 and where the {source} part of the filename is:
@@ -44,24 +48,34 @@ empowered by [Mermaid-Js](https://mermaid-js.github.io/mermaid/)
 ``` mermaid
 flowchart LR
     i1((Observatory))
-    i2((OBS_TIME_T))
-    a1[SunEarthAnalyzer]
-    a2[interface of<br>SPA_Analyzer]
-    b1[SPA_Analyzer]
-    b2[(C implementation of<br>SPA algorithm)]
+    i2((Local Datatime))
+    c1[SunEarthAnalyzer]
+    a1[py::Algorithm]
+    a2[py::SPACalculator]
+    b1[Algorithm]
+    b2[SPACalculator]
+    d1[(C implementation of<br>SPA algorithm)]
 
-    i1---a1
-    i2---a1
-    Python<===>|pybind11|CPP
+    i1---c1
+    i2---c1
 
-    subgraph Python
-        a1-->|set_observatory|a2
-        a1-->|sun_position_at|a2
+    Py<===>|pybind11|Cpp
+
+    subgraph Frontend
+        c1--->Py
+        subgraph Py
+            direction TB
+            a1-->a2
+        end
     end
 
-    subgraph CPP
-        direction TB
-        b1-->|calculate_sun_position_at|b2
+    subgraph Backend
+        Cpp--->d1
+
+        subgraph Cpp
+            direction TB
+            b1-->b2
+        end
     end
 ```
 
@@ -70,58 +84,67 @@ flowchart LR
 ``` mermaid
 sequenceDiagram
     participant SunEarthAnalyzer
-    participant SPA_Analyzer
+    participant SPACalculator
     participant SPA
-    SunEarthAnalyzer ->>+ SPA_Analyzer: load algorithm
-    SPA_Analyzer -->>- SunEarthAnalyzer: calculator
+    SunEarthAnalyzer ->>+ SPACalculator: load algorithm
+    SPACalculator -->>- SunEarthAnalyzer: calculator
 
-    SunEarthAnalyzer ->> SPA_Analyzer: set observatory
+    SunEarthAnalyzer ->> SPACalculator: set observatory
+    SunEarthAnalyzer ->> SPACalculator: set local datetime
 
-    SunEarthAnalyzer ->>+ SPA_Analyzer: sun position at ?
+    SunEarthAnalyzer ->>+ SPACalculator: sun position ?
     % break when observatory not set
-    %     SPA_Analyzer -->> SunEarthAnalyzer: RuntimeError
+    %     SPACalculator -->> SunEarthAnalyzer: RuntimeError
     % end
-    SPA_Analyzer -->>+ SPA: calculate sun position at ?
+    SPACalculator -->>+ SPA: calculate sun position at ?
     % break when validate_inputs fails
-    %     SPA-->SPA_Analyzer: error code
+    %     SPA-->SPACalculator: error code
     % end
     SPA -->> SPA: spa calcluate
-    SPA -->>- SPA_Analyzer: spa_data
-    SPA_Analyzer -->>- SunEarthAnalyzer: TopoCentricSunPositionResult
+    SPA -->>- SPACalculator: spa_data
+    SPACalculator -->>- SunEarthAnalyzer: TopoCentricSunPositionResult
 ```
 
 ### 3. Class Diagram
 
 ``` mermaid
 classDiagram
-    SunEarthAnalyzer "1" --> "0..1" Analyzer: load algorithm
+    SunEarthAnalyzer "1" --> "0..1" Algorithm: load algorithm
     SunEarthAnalyzer "1" --> "0..1" Observatory: set observatory
     SunEarthAnalyzer --> TopoCentricSunPositionResult: sun position at
-    Analyzer <|-- SPA_Analyzer
-    Analyzer <|-- SG2_Analyzer
-    TopoCentricSunPositionResult --> OBS_TIME_T
+    Algorithm <|-- SPACalculator
+    Algorithm <|-- SG2_Calculator
+    Algorithm <|-- Other_Algorithm
     class SunEarthAnalyzer {
-        +String algorithm
-        +Observatory observatory
-        -Analyzer _impl
+        +algorithm: string
+        +observatory: Observatory
+        +registered: dict
+        -_impl: Algorithm
         +has_set_observatory()
-        +sun_position_at(obs_time: OBS_TIME_T)
+        +sun_position_at(local_datetime)
         -_load_algorithm()
     }
-    class Analyzer {
+    class Algorithm {
         -_observatory_set: bool = false
-        +virtual: get_observatory()
-        +virtual: set_observatory(kwargs)
-        +virtual: calc_sun_position_at(year,month,day,hour,minute,second)
+        -_local_datetime_set: bool = false
+        -_observatory: map<string, double>
+        -_local_datetime: array<int>
+        + static OBS_FIELDS: vector<string>
         +has_set_observatory()
+        +get_observatory()
+        +set_observatory(...)
+        +has_set_local_datetime()
+        +get_local_datetime()
+        +set_local_datetime(...)
+        +virtual: name()
+        +virtual: calc_sun_position()
     }
-    <<interface>> Analyzer
-    class SPA_Analyzer {
-        -_observatory: map[string, double]
+    <<interface>> Algorithm
+    class SPACalculator {
         -_spa: spa_data
 
     }
-    class SG2_Analyzer {
+    class SG2_Calculator {
         TODO
     }
     class Observatory {
@@ -135,23 +158,32 @@ classDiagram
         +temperature: float = 0
         +atmos_refract: float = 0
     }
-
-    class OBS_TIME_T {
-        +year: int
-        +month: int
-        +day: int
-        +hour: int
-        +minute: int
-        +second: int
-    }
     class TopoCentricSunPositionResult {
         +zenith: float
         +azimuth: float
         +julian_day: float = None
-        +obs_time: OBS_TIME_T = None
     }
 ```
 
+## How to add algorithm
+
+1. Add an sub-class of `Algorithm`, implementing two methods: `name` and `calc_sun_position`
+
+2. Add a [pybind11 trampoline class](https://pybind11.readthedocs.io/en/stable/advanced/classes.html#overriding-virtual-functions-in-python) for the new algorithm class for automatic downcasting
+
+3. Bind the algorithm to python in `src/cpp/main.cpp`
+```cpp
+    py::class_<SPACalculator, Algorithm, PySPACaculator>(m, "SPACalculator")
+        .def(py::init<>())
+        .def_property_readonly("name", &SPACalculator::name)
+        .def("calc_sun_position", &SPACalculator::calc_sun_position);
+```
+4. Register the algorithm in `src/python/fseg/impl/__init__.py`
+```py
+registered_algorithms = {
+    "SPA": SPACalculator,
+}
+```
 ## Tests by Pytest
 
 Currently, only Python code is tested by pytest. You are welcome to incorporate C++ tests.

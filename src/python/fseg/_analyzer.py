@@ -1,48 +1,74 @@
 from dataclasses import asdict
-from datetime import datetime
-from typing import Any, Tuple
+from typing import Optional
 
-from ._data import (
-    OBS_TIME_T,
+from fseg._data import (
+    DateTime_INPUT,
+    LocalDateTime,
     Observatory,
+    Observatory_INPUT,
     TopoCentricSunPositionResult,
-    safely_from_dict,
 )
-from ._fseg import SPA_Analyzer
+from fseg.impl import registered_algorithms
 
 
 class SunEarthAnalyzer(object):
     """
     Interface class for sun-earth-analysis
 
-    Args:
-        algorithm (str): currently supports 'SPA'; Defaults to 'SPA'
+    Attributes:
+        registered: map of algorithm name to its implementation class
+        algorithm: name of algorithm
+        observatory: relevant geological information of location
     """
 
-    def __init__(self, algorithm: str = "SPA") -> None:
-        self._algorithm = algorithm
-        self._obs = Observatory(0.0, 0.0, 0.0, 0.0)
-        self._load_algorithm()
+    def __init__(self) -> None:
+        self.registered = registered_algorithms
 
-    def _load_algorithm(self):
-        if self._algorithm.upper() == "SPA":
-            self._impl = SPA_Analyzer()
+    @property
+    def algorithm(self) -> Optional[str]:
+        """
+        unique name of algorithm
+
+        Returns:
+            Optional[str]: None if no algorithm loaded
+        """
+        if hasattr(self, "_impl"):
+            return self._impl.name
         else:
-            raise ValueError(f"Unknown algorithm {self._algorithm}")
+            return None
 
-    def set_observatory(self, **kwargs) -> None:
-        obs_keys = vars(self._obs)
-        for k, v in kwargs.items():
-            if k in obs_keys:
-                setattr(self._obs, k, v)
+    @algorithm.setter
+    def algorithm(self, algorithm: str):
+        if hasattr(self, "_impl"):
+            del self._impl
+        self._load_algorithm(algorithm)
 
-        self._impl.set_observatory(**asdict(self._obs))
+    def _load_algorithm(self, _algorithm: str):
+        algo_cls = self.registered.get(_algorithm)
+        if algo_cls:
+            self._impl = algo_cls()
+        else:
+            raise ValueError(f"Unknown algorithm: {_algorithm}")
 
-    def get_observatory(self) -> Observatory:
+    @property
+    def observatory(self) -> Optional[Observatory]:
+        """
+        wrap c++ map<string, double> with dataclass Observatory
+
+        Returns:
+            Optional[Observatory]: None if observatory not set
+        """
         if self.has_set_observatory():
-            return safely_from_dict(self._impl.get_observatory(), Observatory)
+            return Observatory(**self._impl.get_observatory())
         else:
-            return self._obs
+            return None
+
+    @observatory.setter
+    def observatory(self, value: Observatory_INPUT):
+        if hasattr(self, "_impl"):
+            if isinstance(value, dict):
+                value = Observatory(**value)
+            self._impl.set_observatory(asdict(value))
 
     def has_set_observatory(self) -> bool:
         """
@@ -53,113 +79,94 @@ class SunEarthAnalyzer(object):
 
         Examples:
             >>> sea = SunEarthAnalyzer()
+            >>> sea.algorithm = "SPA"
             >>> sea.has_set_observatory()
             False
-            >>> sea.sun_position_at(2020,5,13,17,15,30)
+            >>> sea.sun_position_at([2020, 5, 13, 17, 15, 30])
             Traceback (most recent call last):
               ...
-            RuntimeError: Observatory has not set
+            RuntimeError: Observatory is unset
 
             >>> d = {'timezone': -7.0, 'longitude': -105.1786, 'latitude': 39.742476,
-            ...      'elevation': 1830.14, 'foo': 100.0}
-            >>> sea.set_observatory(**d)
+            ...      'elevation': 1830.14}
+            >>> sea.observatory = d
             >>> sea.has_set_observatory()
             True
+            >>> sea.observatory
+            Observatory(longitude=-105.1786, latitude=39.742476, elevation=1830.14,
+            timezone=-7.0, delta_ut1=0.0, delta_t=0.0, pressure=0.0, temperature=0.0,
+            atmos_refract=0.0)
         """
-        return self._impl.has_set_observatory()
+        return hasattr(self, "_impl") and self._impl.has_set_observatory()
 
-    def sun_position_at(
-        self, dt: Any = None, DEBUG: bool = False, **kwargs
-    ) -> Tuple[OBS_TIME_T, TopoCentricSunPositionResult]:
+    def sun_position_at(self, dt: DateTime_INPUT) -> TopoCentricSunPositionResult:
         """
         API for calculating sun position at a time
 
         Args:
-            dt (Any, optional): supports str and datetime format of observation
-                time. Defaults to None, when kwargs of (year, month, day, hour,
-                minute, second) must be given.
-            DEBUG (bool, optional): when set, print result in multiline format.
-                Defaults to False.
+            dt (DateTime_INPUT): supports str, datetime and array format of observation
+                time.
 
         Raises:
             ValueError: invalid inputs for observation time or
                 failed at validation stage of the implemented algorithm
 
         Returns:
-            (dt,sp) (Tuple[OBS_TIME_T, TopoCentricSunPositionResult]):
-                dt (year,month,day,hour,minute,second): parsed observation time
-                sp: topocentric solar position with julian day
+            sp (TopoCentricSunPositionResult): topocentric solar position with optional
+                Julian day
 
         Examples:
             >>> sea = SunEarthAnalyzer()
-            >>> sea.set_observatory(
+            >>> sea.algorithm = "SPA"
+            >>> sea.observatory = Observatory(
             ...     longitude=-105.1786, latitude=39.742476, elevation=1830.14,
             ...     timezone=-7.0, delta_ut1=0, delta_t=67,
             ...     pressure=820, temperature=11, atmos_refract=0.5667,
             ... )
-            >>> dt, sp = sea.sun_position_at("2003-10-17 12:30:30")
-            >>> dt
-            (2003, 10, 17, 12, 30, 30)
+            >>> sp = sea.sun_position_at("2003-10-17 12:30:30")
             >>> sp
             TopoCentricSunPositionResult(zenith=50.11162202402972,
             ... azimuth=194.34024051019162, julian_day=2452930.312847222)
+            >>> sea._impl.get_local_datetime()
+            [2003, 10, 17, 12, 30, 30]
         """
-        try:
-            if dt is None:
-                _year, _month = int(kwargs["year"]), int(kwargs["month"])
-                _day, _hour = int(kwargs["day"]), int(kwargs["hour"])
-                _minute, _second = int(kwargs["minute"]), int(kwargs["second"])
-            else:
-                if isinstance(dt, str):
-                    dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-
-                if isinstance(dt, datetime):
-                    _year, _month, _day = dt.year, dt.month, dt.day
-                    _hour, _minute, _second = dt.hour, dt.minute, dt.second
-                else:
-                    raise TypeError(f"Invalid type for dt: {type(dt)}")
-        except Exception:
-            raise ValueError(f"Invalid argument: dt={dt}, {kwargs}")
-
-        sp = self._sun_position_at(_year, _month, _day, _hour, _minute, _second)
-
-        if DEBUG:
-            obs = self.get_observatory()
-            print("----------INPUT----------")
-            print("Year:           %d" % _year)
-            print("Month:          %d" % _month)
-            print("Day:            %d" % _day)
-            print("Hour:           %d" % _hour)
-            print("Minute:         %d" % _minute)
-            print("Second:         %d" % _second)
-            print("Timezone:       %.6f" % obs.timezone)
-            print("Longitude:      %.6f" % obs.longitude)
-            print("Latitude:       %.6f" % obs.latitude)
-            print("Elevation:      %.6f" % obs.elevation)
-            print("Pressure:       %.6f" % obs.pressure)
-            print("Temperature:    %.6f" % obs.temperature)
-            print("Atmos_Refract:  %.6f" % obs.atmos_refract)
-            print("Delta T:        %.6f" % obs.delta_t)
-            print("----------OUTPUT----------")
-            if sp.julian_day:
-                print("Julian Day:    %.6f" % sp.julian_day)
-            print("Zenith:        %.6f degrees" % sp.zenith)
-            print("Azimuth:       %.6f degrees" % sp.azimuth)
-
-        dt = (_year, _month, _day, _hour, _minute, _second)
-        return dt, sp
-
-    def _sun_position_at(
-        self, year: int, month: int, day: int, hour: int, minute: int, second: int
-    ) -> TopoCentricSunPositionResult:
-        """
-        directly call c++ library, when performance is critical
-        """
-        zenith, azimuth, julian_day = self._impl.calc_sun_position_at(
-            year, month, day, hour, minute, second
-        )
-
-        return TopoCentricSunPositionResult(zenith, azimuth, julian_day)
+        self._impl.set_local_datetime(dt)
+        return TopoCentricSunPositionResult(*self._impl.calc_sun_position())
 
     def __repr__(self) -> str:
-        return f"SunEarthAnalyzer(algorithm={self._algorithm})"
+        return f"SunEarthAnalyzer(algorithm={self.algorithm})"
+
+    @staticmethod
+    def print_sun_position_details(
+        observatory: Observatory,
+        local_datetime: LocalDateTime,
+        sun_position: TopoCentricSunPositionResult,
+    ):
+        """
+        print result in multiline format, for DEBUG
+
+        Args:
+            observatory (Observatory): _description_
+            local_datetime (LocalDateTime): _description_
+            sun_position (TopoCentricSunPositionResult): _description_
+        """
+        print("----------INPUT----------")
+        print("Year:          %d" % local_datetime[0])
+        print("Month:         %d" % local_datetime[1])
+        print("Day:           %d" % local_datetime[2])
+        print("Hour:          %d" % local_datetime[3])
+        print("Minute:        %d" % local_datetime[4])
+        print("Second:        %d" % local_datetime[5])
+        print("Timezone:      %.6f" % observatory.timezone)
+        print("Longitude:     %.6f" % observatory.longitude)
+        print("Latitude:      %.6f" % observatory.latitude)
+        print("Elevation:     %.6f" % observatory.elevation)
+        print("Pressure:      %.6f" % observatory.pressure)
+        print("Temperature:   %.6f" % observatory.temperature)
+        print("Atmos_Refract: %.6f" % observatory.atmos_refract)
+        print("Delta T:       %.6f" % observatory.delta_t)
+        print("----------OUTPUT----------")
+        if sun_position.julian_day:
+            print("Julian Day:    %.6f" % sun_position.julian_day)
+        print("Zenith:        %.6f degrees" % sun_position.zenith)
+        print("Azimuth:       %.6f degrees" % sun_position.azimuth)

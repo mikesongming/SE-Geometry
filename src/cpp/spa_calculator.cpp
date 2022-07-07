@@ -1,26 +1,13 @@
 #include <stdexcept>
 
-#include "analyzer.h"
+#include "spa_calculator.h"
 
-const std::vector<std::string> Analyzer::OBS_FLD_NAMES = {
-    "longitude", "latitude", "elevation",   "timezone",      "delta_ut1",
-    "delta_t",   "pressure", "temperature", "atmos_refract",
-};
-
-void SPA_Analyzer::set_observatory(const py::kwargs &kwargs)
+std::vector<double> SPACalculator::calc_sun_position()
 {
-    for (auto &&fname : OBS_FLD_NAMES)
-    {
-        if (kwargs.contains(fname))
-        {
-            _observatory[fname] = kwargs.attr("get")(fname, 0.0).cast<double>();
-        }
-
-        if (_observatory.find(fname) == _observatory.end())
-        {
-            _observatory[fname] = 0.0;
-        }
-    }
+    if (!has_set_observatory())
+        throw std::runtime_error("Observatory is unset");
+    if (!has_set_local_datetime())
+        throw std::runtime_error("Local datetime is unset");
 
     _spa.longitude = _observatory["longitude"];
     _spa.latitude = _observatory["latitude"];
@@ -33,42 +20,18 @@ void SPA_Analyzer::set_observatory(const py::kwargs &kwargs)
     _spa.atmos_refract = _observatory["atmos_refract"];
     _spa.function = SPA_ZA;
 
-    _observatory_set = true;
-}
-
-py::dict SPA_Analyzer::get_observatory()
-{
-    py::dict d(py::arg("longitude") = _observatory["longitude"],
-               py::arg("latitude") = _observatory["latitude"],
-               py::arg("elevation") = _observatory["elevation"],
-               py::arg("timezone") = _observatory["timezone"],
-               py::arg("delta_ut1") = _observatory["delta_ut1"],
-               py::arg("delta_t") = _observatory["delta_t"],
-               py::arg("pressure") = _observatory["pressure"],
-               py::arg("temperature") = _observatory["temperature"],
-               py::arg("atmos_refract") = _observatory["atmos_refract"]);
-
-    return d;
-}
-
-py::tuple SPA_Analyzer::calc_sun_position_at(int year, int month, int day,
-                                             int hour, int minute, int second)
-{
-    if (!_observatory_set)
-        throw std::runtime_error("Observatory has not set");
-
-    _spa.year = year;
-    _spa.month = month;
-    _spa.day = day;
-    _spa.hour = hour;
-    _spa.minute = minute;
-    _spa.second = second;
+    _spa.year = _local_datetime[0];
+    _spa.month = _local_datetime[1];
+    _spa.day = _local_datetime[2];
+    _spa.hour = _local_datetime[3];
+    _spa.minute = _local_datetime[4];
+    _spa.second = _local_datetime[5];
 
     int result = spa_calculate(&_spa);
 
     if (result == 0)
     {
-        return py::make_tuple(_spa.zenith, _spa.azimuth, _spa.jd);
+        return std::vector<double>{_spa.zenith, _spa.azimuth, _spa.jd};
     }
     else
     {
@@ -77,26 +40,27 @@ py::tuple SPA_Analyzer::calc_sun_position_at(int year, int month, int day,
         {
         case 1:
             err_msg = "Year Not in valid range: -2000 to 6000, " +
-                      std::to_string(year);
+                      std::to_string(_spa.year);
             break;
         case 2:
-            err_msg =
-                "Month Not in valid range: 1 to 12, " + std::to_string(month);
+            err_msg = "Month Not in valid range: 1 to 12, " +
+                      std::to_string(_spa.month);
             break;
         case 3:
-            err_msg = "Day Not in valid range: 1 to 31, " + std::to_string(day);
+            err_msg =
+                "Day Not in valid range: 1 to 31, " + std::to_string(_spa.day);
             break;
         case 4:
-            err_msg =
-                "Hour Not in valid range: 0 to 24, " + std::to_string(hour);
+            err_msg = "Hour Not in valid range: 0 to 24, " +
+                      std::to_string(_spa.hour);
             break;
         case 5:
-            err_msg =
-                "Minute Not in valid range: 0 to 59, " + std::to_string(minute);
+            err_msg = "Minute Not in valid range: 0 to 59, " +
+                      std::to_string(_spa.minute);
             break;
         case 6:
             err_msg = "Second Not in valid range: 0 to <60, " +
-                      std::to_string(second);
+                      std::to_string(_spa.second);
             break;
         case 7:
             err_msg = "Delta_t Not in valid range: -8000 to 8000 seconds, " +

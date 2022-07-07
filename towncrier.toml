@@ -22,7 +22,7 @@ wrap=true
   showcontent = true
 
   [[tool.towncrier.type]]
-  directory = "docs"
+  directory = "doc"
   name = ":memo: Documentation Improvements"
   showcontent = true
 

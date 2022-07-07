@@ -1,11 +1,75 @@
 import os
+import platform
 import re
 import subprocess
 import sys
 import sysconfig
+import tarfile
+import tempfile
+from pathlib import Path
 
+import wget
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
+
+
+def download_and_extract_tzdata2022a(tempdir: Path):
+    iana_url = "https://data.iana.org/time-zones/releases/tzdata2022a.tar.gz"
+    local_iana_file = tempdir.joinpath(Path(iana_url).name)
+
+    wget.download(iana_url, str(local_iana_file))
+    local_tzdata_dir = tempdir.joinpath(Path(Path(local_iana_file.name).stem).stem)
+
+    with tarfile.open(local_iana_file, "r:gz") as tar:
+        tar.extractall(local_tzdata_dir)
+
+    return local_tzdata_dir
+
+
+def download_windows_mapping_file(tempdir: Path):
+    url = "/".join(
+        [
+            "https://raw.githubusercontent.com/unicode-org/cldr",
+            "main/common/supplemental/windowsZones.xml",
+        ]
+    )
+    local_file = tempdir.joinpath(Path(url).name)
+
+    wget.download(url, str(local_file))
+    return local_file
+
+
+def pack_hhdate_tzdata(tzdata_dir: Path, tzdata2022a_dir: Path, mapping_file: Path):
+    if not tzdata_dir.exists():
+        tzdata2022a_dir.rename(tzdata_dir)
+        mapping_file.rename(tzdata_dir.joinpath(mapping_file.name))
+        return tzdata_dir
+    else:
+        return None
+
+
+def print_tzdata(tzdata_dir: Path):
+    for child in tzdata_dir.iterdir():
+        print(child)
+        if child.is_dir():
+            for _c in child.iterdir():
+                print(_c)
+
+
+def download_tzdata():
+    tzdata_dir = Path().home().joinpath("Downloads", "tzdata")
+    if tzdata_dir.exists():
+        print(f"{tzdata_dir} already exists, skip download.")
+    else:
+        print("Downloading tzdata for Windows")
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempDir:
+            tempDir = Path(tempDir)
+            tzdata2022a_dir = download_and_extract_tzdata2022a(tempDir)
+            mapping_file = download_windows_mapping_file(tempDir)
+            pack_hhdate_tzdata(tzdata_dir, tzdata2022a_dir, mapping_file)
+            if tzdata_dir:
+                print_tzdata(tzdata_dir)
+
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
@@ -45,6 +109,7 @@ class CMakeBuild(build_ext):
         # from Python.
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
+            f"-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY={extdir}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
         ]
@@ -103,9 +168,12 @@ class CMakeBuild(build_ext):
             assert cfg == "Release", "MSVC only support Release build-type"
             sysconfig.get_config_vars()["Py_DEBUG"] = False
 
-        if sys.platform.startswith("darwin"):
+        if platform.platform().startswith("macOS"):
             macosx_version_min = sysconfig.get_config_var("MACOSX_DEPLOYMENT_TARGET")
             if macosx_version_min:
+                # Anaconda currently set macosx_version_min='10.9'
+                # which is not compatible with C++17 on MacOSX
+                macosx_version_min = "10.12"
                 cmake_args += [
                     "-DCMAKE_OSX_DEPLOYMENT_TARGET={}".format(macosx_version_min)
                 ]
@@ -114,6 +182,13 @@ class CMakeBuild(build_ext):
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
             if archs:
                 cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
+        elif platform.platform().startswith("Windows"):
+            try:
+                download_tzdata()
+            except Exception as e:
+                print("Failed to download tzdata for Windows", file=sys.stderr)
+                print(type(e), "::", e, file=sys.stderr)
+                exit(1)
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
@@ -137,13 +212,13 @@ class CMakeBuild(build_ext):
 setup(
     packages=find_packages(where="src/python"),
     package_dir={"fseg": "src/python/fseg"},
-    ext_package="fseg",
+    ext_package="fseg.impl",
     ext_modules=[CMakeExtension("_fseg")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     python_requires=">=3.10",
     platforms=[
-        "cp310-macosx-10_9-x86_64",
+        "cp310-macosx-10_12-x86_64",
         "cp310-manylinux2014_x86_64",
         "cp310-win_amd64",
     ],
